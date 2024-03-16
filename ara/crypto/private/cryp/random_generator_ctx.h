@@ -25,11 +25,11 @@ namespace ara{
 
                 virtual ara::core::Result< ara::core::Vector<ara::core::Byte> > Generate (std::uint32_t count) noexcept=0;
 
-                virtual ExtensionService::Uptr GetExtensionService () const noexcept=0;
+               // virtual ExtensionService::Uptr GetExtensionService () const noexcept=0;
 
                 virtual bool Seed (ReadOnlyMemRegion seed) noexcept=0;
                 
-                virtual bool Seed (const SecretSeed &seed) noexcept=0;
+                //virtual bool Seed (const SecretSeed &seed) noexcept=0;
                 
                 virtual bool SetKey (const SymmetricKey &key) noexcept=0;
             };
