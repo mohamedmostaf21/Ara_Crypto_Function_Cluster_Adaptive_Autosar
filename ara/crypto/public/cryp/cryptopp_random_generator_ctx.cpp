@@ -7,9 +7,10 @@ namespace ara
         namespace cryp
         {
             const std::string Cryptopp_RandomGeneratorctx::mAlgName("random_generator");
-            Cryptopp_RandomGeneratorctx::Cryptopp_RandomGeneratorctx () : RandomGeneratorCtx(),
+           Cryptopp_RandomGeneratorctx::Cryptopp_RandomGeneratorctx () : RandomGeneratorCtx(),
                                                                         mPId(mAlgId,mAlgName),
-                                                                        rng(new CryptoPP::AutoSeededRandomPool()) 
+                                                                        rng(new CryptoPP::AutoSeededRandomPool()),
+                                                                        mSetKeyState(setKeyState::NOT_CALLED)
             {
                    
             }
@@ -23,8 +24,9 @@ namespace ara
             
             bool Cryptopp_RandomGeneratorctx::IsInitialized () const noexcept
             {
-                return true;
+                return (mSetKeyState == setKeyState::CALLED && mKey != nullptr);
             }
+
 
             ara::core::Result< ara::core::Vector<ara::core::Byte> > Cryptopp_RandomGeneratorctx::Generate (std::uint32_t count) noexcept
             {
@@ -72,19 +74,23 @@ namespace ara
             
             bool Cryptopp_RandomGeneratorctx::SetKey (const SymmetricKey &key) noexcept
             {  
-                try
+                const CryptoPP_AES_SymmetricKey& aesKey = dynamic_cast<const CryptoPP_AES_SymmetricKey&>(key);
+                //if(aesKey.GetAllowedUsage() == kAllowRngInit)
+                if(aesKey.GetAllowedUsage())
                 {
-                    const CryptoPP_AES_SymmetricKey& aesKey = dynamic_cast<const CryptoPP_AES_SymmetricKey&>(key);
                     mKey = new CryptoPP_AES_SymmetricKey(aesKey);
                     
-                    
+                    mSetKeyState = setKeyState::CALLED;
                     return true;
                 }
-                catch (const std::bad_cast& e) {
-                    std::cerr << "Failed to cast SymmetricKey to CryptoPP_AES_SymmetricKey: " << e.what() << std::endl;
+                else 
+                {
+                    std::cerr << "Failed to cast SymmetricKey to CryptoPP_AES_SymmetricKey: " << std::endl;
                     return false;
                 }
+             
             }
+
 
             Cryptopp_RandomGeneratorctx::~Cryptopp_RandomGeneratorctx ()
             {
