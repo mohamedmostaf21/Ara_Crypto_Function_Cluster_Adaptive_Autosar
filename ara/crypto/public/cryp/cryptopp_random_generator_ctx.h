@@ -15,6 +15,11 @@ namespace ara
     {
         namespace cryp
         {
+            enum class setKeyState
+            {
+                CALLED,
+                NOT_CALLED
+            };
             class Cryptopp_RandomGeneratorctx : public RandomGeneratorCtx
             {
                 
@@ -27,6 +32,7 @@ namespace ara
                 static const std::string mAlgName;
                 const CryptoPrimitiveId::AlgId mAlgId = 4;
                 CryptoPP_AES_SymmetricKey *mKey;
+                setKeyState   mSetKeyState;
                
                 /******************** Constructour *****************/
                 Cryptopp_RandomGeneratorctx();
@@ -41,11 +47,11 @@ namespace ara
 
                 virtual ara::core::Result<ara::core::Vector<ara::core::Byte> > Generate (std::uint32_t count) noexcept override;
 
-                virtual ExtensionService::Uptr GetExtensionService () const noexcept override;
+               // virtual ExtensionService::Uptr GetExtensionService () const noexcept override;
 
                 virtual bool Seed (ReadOnlyMemRegion seed) noexcept override;
                 
-                virtual bool Seed (const SecretSeed &seed) noexcept override;
+               // virtual bool Seed (const SecretSeed &seed) noexcept override;
                 
                 virtual bool SetKey (const SymmetricKey &key) noexcept override;
                 ~Cryptopp_RandomGeneratorctx();
