@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../ara/crypto/public/cryp/cryobj/cryptopp_hmac_sha_256_signature.h"
+#include "../ara/crypto/public/cryp/cryptopp_hmac_sha_512_message_authn_code_ctx.h"
 #include "../ara/crypto/helper/print.h"
 #include "../ara/crypto/private/common/entry_point.h"
 #include "../ara/core/instance_specifier.h"
@@ -29,7 +29,7 @@ int main()
 
     if(!hmac512Create.HasValue())
     {
-        std::cout << "Failed to Create HMAC 256 Context\n";
+        std::cout << "Failed to Create HMAC 512 Context\n";
         return 0;
     }
 

@@ -1,4 +1,5 @@
 #include <iostream>
+#include "../ara/crypto/public/cryp/cryptopp_sha_256_hash_function_ctx.h"
 #include "../ara/crypto/public/cryp/cryptopp_hmac_sha_256_message_authn_code_ctx.h"
 #include "../ara/crypto/helper/print.h"
 #include "../ara/crypto/private/common/entry_point.h"
@@ -25,26 +26,25 @@ int main()
         return 0;
     }
 
-    auto hmac256Create = myProvider->CreateMessageAuthCodeCtx(1);
+    auto hash256Create = myProvider->CreateHashFunctionCtx(1);
 
-    if(!hmac256Create.HasValue())
+    if(!hash256Create.HasValue())
     {
         std::cout << "Failed to Create HMAC 256 Context\n";
         return 0;
     }
 
     
-    auto hmac256 = std::move(hmac256Create).Value();
+    auto hash256 = std::move(hash256Create).Value();
 
     SymmetricKey::Uptrc myKey = CryptoPP_AES_SymmetricKey::createInstance();
 
-    hmac256->SetKey(*myKey);
     
     std::string str = "Hello There";
     ara::crypto::ReadOnlyMemRegion instr(reinterpret_cast<const std::uint8_t*>(str.data()), str.size());
 
 
-    auto _result_Start = hmac256->Start();
+    auto _result_Start = hash256->Start();
     if(_result_Start.HasValue())
     {
         std::cout<<"success Start\n";
@@ -56,7 +56,7 @@ int main()
         std::cout << error.Message() << std::endl;
     }
 
-    auto _result_Update = hmac256->Update(instr);
+    auto _result_Update = hash256->Update(instr);
     if(_result_Update.HasValue())
     {
         std::cout<<"success Update\n";
@@ -68,12 +68,12 @@ int main()
         std::cout << error.Message() << std::endl;
     }
 
-    auto _result_Finish = hmac256->Finish();
+    auto _result_Finish = hash256->Finish();
     if(_result_Finish.HasValue())
     {
         std::cout<<"success Finish\n";
 
-        auto digest =  hmac256->GetDigest();
+        auto digest =  hash256->GetDigest();
 
         if(digest.HasValue())
         {

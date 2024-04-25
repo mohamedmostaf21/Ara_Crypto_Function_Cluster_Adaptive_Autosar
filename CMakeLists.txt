@@ -221,3 +221,11 @@ target_link_libraries(demo_hmac_256 Crypto)
 add_executable(demo_hmac_512 Demos/demo_hmac_512.cpp)
 target_link_libraries(demo_hmac_512 ${Crypto++_LIBRARIES})
 target_link_libraries(demo_hmac_512 Crypto)
+
+add_executable(demo_hash_256 Demos/demo_hash_256.cpp)
+target_link_libraries(demo_hash_256 Crypto)
+target_link_libraries(demo_hash_256 ${Crypto++_LIBRARIES})
+
+add_executable(demo_hash_512 Demos/demo_hash_512.cpp)
+target_link_libraries(demo_hash_512 Crypto)
+target_link_libraries(demo_hash_512 ${Crypto++_LIBRARIES})

@@ -2,7 +2,6 @@
 #define CRYPTOPP_HMAC_SHA256_SIGNATURE_H
 
 #include "../../../private/cryp/cryobj/signature.h"
-#include "../cryptopp_sha_256_hash_function_ctx.h"
 
 namespace ara
 {

@@ -2,7 +2,6 @@
 #define CRYPTOPP_HMAC_SHA512_SIGNATURE_H
 
 #include "../../../private/cryp/cryobj/signature.h"
-#include "../cryptopp_sha_512_hash_function_ctx.h"
 
 namespace ara
 {

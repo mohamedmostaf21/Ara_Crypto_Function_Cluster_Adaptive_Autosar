@@ -18,6 +18,10 @@ namespace ara
                     
                     return ara::core::Result<HashFunctionCtx::Uptr>(std::make_unique<CryptoPP_SHA_256_HashFunctionCtx>());
                 }
+                else if(algId == 2)
+                {
+                    return ara::core::Result<HashFunctionCtx::Uptr>(std::make_unique<CryptoPP_SHA_512_HashFunctionCtx>());
+                }
                 else
                 {
                     return ara::core::Result<HashFunctionCtx::Uptr>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kUnknownIdentifier,5));
