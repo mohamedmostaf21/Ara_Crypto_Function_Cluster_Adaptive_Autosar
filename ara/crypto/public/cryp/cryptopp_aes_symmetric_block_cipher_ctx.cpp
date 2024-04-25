@@ -100,20 +100,44 @@ namespace ara
 
                 try 
                 {
-                    CryptoPP::ECB_Mode<CryptoPP::AES>::Encryption encryptor;
-                    encryptor.SetKey(mKey->getKey(), mKey->getKey().size());
-                    //std::cout << "Key: " << bytes_to_hex(mKey->getKey(), mKey->getKey().size()) << std::endl;
-            
-                    std::string plain(in.begin(), in.end());
-                    std::cout << "Input Data: " << plain << std::endl;
+                    if(mTransform == CryptoTransform::kEncrypt)
+                    {
+                        CryptoPP::ECB_Mode<CryptoPP::AES>::Encryption encryptor;
+                        encryptor.SetKey(mKey->getKey(), mKey->getKey().size());
+                        //std::cout << "Key: " << bytes_to_hex(mKey->getKey(), mKey->getKey().size()) << std::endl;
+                
+                        std::string plain(in.begin(), in.end());
+                        std::cout << "Input Data: " << plain << std::endl;
 
-                    std::string cipher;
-                    CryptoPP::StringSource(plain, true, new CryptoPP::StreamTransformationFilter(encryptor, new CryptoPP::StringSink(cipher)));
-                    //std::cout << "Cipher Text: " << bytes_to_hex((const uint8_t*)cipher.data(), cipher.size()) << std::endl;
-                    //std::cout << "Cipher Text: " << cipher << std::endl;
+                        std::string cipher;
+                        CryptoPP::StringSource(plain, true, new CryptoPP::StreamTransformationFilter(encryptor, new CryptoPP::StringSink(cipher)));
+                        //std::cout << "Cipher Text: " << bytes_to_hex((const uint8_t*)cipher.data(), cipher.size()) << std::endl;
+                        //std::cout << "Cipher Text: " << cipher << std::endl;
 
-                    ara::core::Vector<ara::core::Byte> encryptedData(cipher.begin(), cipher.end());
-                    return ara::core::Result<ara::core::Vector<ara::core::Byte>>(encryptedData);
+                        ara::core::Vector<ara::core::Byte> encryptedData(cipher.begin(), cipher.end());
+                        return ara::core::Result<ara::core::Vector<ara::core::Byte>>(encryptedData);
+                    }
+                    else if(mTransform == CryptoTransform::kDecrypt)
+                    {
+                        CryptoPP::ECB_Mode<CryptoPP::AES>::Decryption decryptor;
+                        decryptor.SetKey(mKey->getKey(), mKey->getKey().size());
+                        //std::cout << "Key: " << bytes_to_hex(mKey->getKey(), mKey->getKey().size()) << std::endl;
+                
+                        std::string cipher(in.begin(), in.end());
+                        std::cout << "Input Data: " << cipher << std::endl;
+
+                        std::string plain;
+                        CryptoPP::StringSource(cipher, true, new CryptoPP::StreamTransformationFilter(decryptor, new CryptoPP::StringSink(plain)));
+                        //std::cout << "Cipher Text: " << bytes_to_hex((const uint8_t*)cipher.data(), cipher.size()) << std::endl;
+                        //std::cout << "Cipher Text: " << cipher << std::endl;
+
+                        ara::core::Vector<ara::core::Byte> decryptedData(plain.begin(), plain.end());
+                        return ara::core::Result<ara::core::Vector<ara::core::Byte>>(decryptedData);
+                    }
+                    else
+                    {
+                        return ara::core::Result<ara::core::Vector<ara::core::Byte>>(ara::core::Vector<ara::core::Byte>());
+                    }
                 } 
                 catch (const CryptoPP::Exception& e) {
                     std::cerr << "Crypto++ exception: " << e.what() << std::endl;

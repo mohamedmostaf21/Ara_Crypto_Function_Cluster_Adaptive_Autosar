@@ -40,7 +40,7 @@ namespace ara
 
             ara::core::Result<bool> Cryptopp_AuthCipherCtx::Check (const Signature &expected) const noexcept
             {
-                 // Assuming 'digest' is a member variable that stores the calculated MAC
+                // Assuming 'digest' is a member variable that stores the calculated MAC
                 // Compare the expected tag with the calculated one
                 // If they are equal, return true, else return false
                 CryptoPP_HMAC_SHA256_Signature& expectedSign = (CryptoPP_HMAC_SHA256_Signature&)expected;

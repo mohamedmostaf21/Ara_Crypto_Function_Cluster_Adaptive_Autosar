@@ -31,6 +31,10 @@ namespace ara
                 {
                     return ara::core::Result<MessageAuthnCodeCtx::Uptr>(std::make_unique<CryptoPP_HMAC_SHA_256_MessageAuthnCodeCtx>());
                 }
+                else if(algId == 2)
+                {
+                    return ara::core::Result<MessageAuthnCodeCtx::Uptr>(std::make_unique<CryptoPP_HMAC_SHA_512_MessageAuthnCodeCtx>());
+                }
                 else
                 {
                     return ara::core::Result<MessageAuthnCodeCtx::Uptr>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kUnknownIdentifier,5));

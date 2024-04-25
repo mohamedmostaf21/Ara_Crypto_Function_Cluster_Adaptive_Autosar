@@ -78,11 +78,15 @@ add_library(
    ara/crypto/public/cryp/cryobj/cryptopp_ecdsa_public_key.h
    ara/crypto/public/cryp/cryobj/cryptopp_ecdsa_private_key.h
    ara/crypto/public/cryp/cryobj/cryptopp_hmac_sha_256_signature.h
+   ara/crypto/public/cryp/cryobj/cryptopp_hmac_sha_512_signature.h
    ara/crypto/public/cryp/cryobj/loadKey.h
 
 
    ara/crypto/public/cryp/cryptopp_sha_256_hash_function_ctx.h
    ara/crypto/public/cryp/cryptopp_sha_256_hash_function_ctx.cpp
+
+   ara/crypto/public/cryp/cryptopp_sha_512_hash_function_ctx.h
+   ara/crypto/public/cryp/cryptopp_sha_512_hash_function_ctx.cpp
 
    ara/crypto/public/cryp/cryptopp_aes_symmetric_block_cipher_ctx.h
    ara/crypto/public/cryp/cryptopp_aes_symmetric_block_cipher_ctx.cpp
@@ -101,6 +105,9 @@ add_library(
 
    ara/crypto/public/cryp/cryptopp_hmac_sha_256_message_authn_code_ctx.h
    ara/crypto/public/cryp/cryptopp_hmac_sha_256_message_authn_code_ctx.cpp  
+
+   ara/crypto/public/cryp/cryptopp_hmac_sha_512_message_authn_code_ctx.h
+   ara/crypto/public/cryp/cryptopp_hmac_sha_512_message_authn_code_ctx.cpp 
 
    ara/crypto/public/cryp/cryptopp_ecdsa_sig_encode_private_ctx.h
    ara/crypto/public/cryp/cryptopp_ecdsa_sig_encode_private_ctx.cpp
@@ -202,3 +209,15 @@ target_link_libraries(randomGen Crypto)
 add_executable(authCipher contexts_samples/example_auth_cipher_ctx.cpp)
 target_link_libraries(authCipher ${Crypto++_LIBRARIES})
 target_link_libraries(authCipher Crypto)
+
+add_executable(demo_aes Demos/demo_aes.cpp)
+target_link_libraries(demo_aes ${Crypto++_LIBRARIES})
+target_link_libraries(demo_aes Crypto)
+
+add_executable(demo_hmac_256 Demos/demo_hmac_256.cpp)
+target_link_libraries(demo_hmac_256 ${Crypto++_LIBRARIES})
+target_link_libraries(demo_hmac_256 Crypto)
+
+add_executable(demo_hmac_512 Demos/demo_hmac_512.cpp)
+target_link_libraries(demo_hmac_512 ${Crypto++_LIBRARIES})
+target_link_libraries(demo_hmac_512 Crypto)
