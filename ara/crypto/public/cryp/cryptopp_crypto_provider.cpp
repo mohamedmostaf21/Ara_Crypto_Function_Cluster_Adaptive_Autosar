@@ -295,7 +295,7 @@ namespace ara
                       return ara::core::Result<SymmetricKey::Uptrc>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kIncompatibleArguments, NoSupplementaryDataForErrorDescription));
                     }
                 }
-                else if(algId == HMAC_SHA_256_ALG_ID)
+                else if(algId == HMAC_SHA_256_ALG_ID || algId == HMAC_SHA_512_ALG_ID)
                 {
                     if(allowedUsage == kAllowSignature)
                     {
@@ -309,12 +309,27 @@ namespace ara
                         }
                         std::cout << std::endl;
 
+                        if(algId == HMAC_SHA_256_ALG_ID)
+                        {
+                            std::unique_ptr<CryptoPP_HMAC_SHA_256_SymmetricKey> ptr = std::make_unique<CryptoPP_HMAC_SHA_256_SymmetricKey>();
 
-                        std::unique_ptr<CryptoPP_HMAC_SHA_256_SymmetricKey> ptr = std::make_unique<CryptoPP_HMAC_SHA_256_SymmetricKey>();
-                            
-                        ptr->setValue(mySymmetricKey);
+                            ptr->setValue(mySymmetricKey);
 
-                        return ara::core::Result<SymmetricKey::Uptrc>(std::move(ptr));
+                            return ara::core::Result<SymmetricKey::Uptrc>(std::move(ptr));
+                        }
+
+                        else if(algId == HMAC_SHA_512_ALG_ID)
+                        {
+                            std::unique_ptr<CryptoPP_HMAC_SHA_512_SymmetricKey> ptr = std::make_unique<CryptoPP_HMAC_SHA_512_SymmetricKey>();
+
+                            ptr->setValue(mySymmetricKey);
+
+                            return ara::core::Result<SymmetricKey::Uptrc>(std::move(ptr));
+                        }
+                        else
+                        {
+                            return ara::core::Result<SymmetricKey::Uptrc>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kIncompatibleArguments, NoSupplementaryDataForErrorDescription));
+                        }
                     }
                     else
                     {

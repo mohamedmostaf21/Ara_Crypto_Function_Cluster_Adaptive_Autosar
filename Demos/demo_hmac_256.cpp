@@ -36,7 +36,15 @@ int main()
     
     auto hmac256 = std::move(hmac256Create).Value();
 
-    SymmetricKey::Uptrc myKey = CryptoPP_AES_SymmetricKey::createInstance();
+    auto myKeyResult = myProvider->GenerateSymmetricKey(HMAC_SHA_256_ALG_ID,kAllowSignature);
+
+    if(!myKeyResult.HasValue())
+    {
+        std::cout << "Failed to generate symmetric key\n";
+        return 0;
+    }
+
+    auto myKey = std::move(myKeyResult).Value();
 
     hmac256->SetKey(*myKey);
     

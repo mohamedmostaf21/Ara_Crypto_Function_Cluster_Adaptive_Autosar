@@ -36,8 +36,6 @@ int main()
     
     auto hash512 = std::move(hash512Create).Value();
 
-    SymmetricKey::Uptrc myKey = CryptoPP_AES_SymmetricKey::createInstance();
-
     
     std::string str = "Hello There";
     ara::crypto::ReadOnlyMemRegion instr(reinterpret_cast<const std::uint8_t*>(str.data()), str.size());

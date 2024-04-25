@@ -78,6 +78,8 @@ add_library(
    ara/crypto/public/cryp/cryobj/cryptopp_rsa_public_key.h
    ara/crypto/public/cryp/cryobj/cryptopp_ecdsa_sha_256_public_key.h
    ara/crypto/public/cryp/cryobj/cryptopp_ecdsa_sha_256_private_key.h
+   ara/crypto/public/cryp/cryobj/cryptopp_hmac_sha_256_symmetric_key.h
+   ara/crypto/public/cryp/cryobj/cryptopp_hmac_sha_512_symmetric_key.h
    ara/crypto/public/cryp/cryobj/cryptopp_hmac_sha_256_signature.h
    ara/crypto/public/cryp/cryobj/cryptopp_hmac_sha_512_signature.h
    ara/crypto/public/cryp/cryobj/loadKey.h
@@ -215,16 +217,16 @@ target_link_libraries(authCipher ${Crypto++_LIBRARIES})
 target_link_libraries(authCipher Crypto)
 
 add_executable(demo_aes Demos/demo_aes.cpp)
-target_link_libraries(demo_aes ${Crypto++_LIBRARIES})
 target_link_libraries(demo_aes Crypto)
+target_link_libraries(demo_aes ${Crypto++_LIBRARIES})
 
 add_executable(demo_hmac_256 Demos/demo_hmac_256.cpp)
-target_link_libraries(demo_hmac_256 ${Crypto++_LIBRARIES})
 target_link_libraries(demo_hmac_256 Crypto)
+target_link_libraries(demo_hmac_256 ${Crypto++_LIBRARIES})
 
 add_executable(demo_hmac_512 Demos/demo_hmac_512.cpp)
-target_link_libraries(demo_hmac_512 ${Crypto++_LIBRARIES})
 target_link_libraries(demo_hmac_512 Crypto)
+target_link_libraries(demo_hmac_512 ${Crypto++_LIBRARIES})
 
 add_executable(demo_hash_256 Demos/demo_hash_256.cpp)
 target_link_libraries(demo_hash_256 Crypto)

@@ -37,7 +37,6 @@ int main()
     
     auto hash256 = std::move(hash256Create).Value();
 
-    SymmetricKey::Uptrc myKey = CryptoPP_AES_SymmetricKey::createInstance();
 
     
     std::string str = "Hello There";

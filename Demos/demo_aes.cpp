@@ -34,7 +34,15 @@ int main()
         return 0;
     }
 
-    SymmetricKey::Uptrc myKey = CryptoPP_AES_128_SymmetricKey::createInstance();
+    auto myKeyResult = myProvider->GenerateSymmetricKey(AES_ECB_128_ALG_ID,kAllowKdfMaterialAnyUsage);
+
+    if(!myKeyResult.HasValue())
+    {
+        std::cout << "Failed to generate symmetric key\n";
+        return 0;
+    }
+
+    auto myKey = std::move(myKeyResult).Value();
     
     auto aes_context = std::move(aes_contextCreate).Value();
     
