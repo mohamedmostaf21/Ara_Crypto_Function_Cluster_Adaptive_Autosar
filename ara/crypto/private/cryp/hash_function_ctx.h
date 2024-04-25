@@ -1,9 +1,7 @@
 #ifndef HASH_FUNCTION_CTX_H
 #define HASH_FUNCTION_CTX_H
 
-#include <memory>
 #include "../../../core/result.h"
-#include "../../../core/vector.h"
 #include "../../../core/utility.h"
 #include "../common/mem_region.h"
 #include "crypto_context.h"

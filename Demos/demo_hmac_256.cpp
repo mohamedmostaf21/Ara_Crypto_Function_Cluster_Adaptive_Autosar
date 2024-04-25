@@ -25,7 +25,7 @@ int main()
         return 0;
     }
 
-    auto hmac256Create = myProvider->CreateMessageAuthCodeCtx(1);
+    auto hmac256Create = myProvider->CreateMessageAuthCodeCtx(HMAC_SHA_256_ALG_ID);
 
     if(!hmac256Create.HasValue())
     {

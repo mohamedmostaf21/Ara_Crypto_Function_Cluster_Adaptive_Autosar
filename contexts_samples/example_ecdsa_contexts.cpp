@@ -1,7 +1,5 @@
-#include "../ara/crypto/public/cryp/cryobj/cryptopp_ecdsa_public_key.h"
-#include "../ara/crypto/public/cryp/cryptopp_ecdsa_sig_encode_private_ctx.h"
-#include "../ara/crypto/public/cryp/cryobj/cryptopp_ecdsa_public_key.h"
-#include "../ara/crypto/public/cryp/cryptopp_ecdsa_msg_recovery_public_ctx.h"
+#include "../ara/crypto/public/cryp/cryptopp_ecdsa_sha_256_sig_encode_private_ctx.h"
+#include "../ara/crypto/public/cryp/cryptopp_ecdsa_sha_256_msg_recovery_public_ctx.h"
 #include "../ara/crypto/helper/print.h"
 
 using namespace ara::crypto::cryp;
@@ -15,7 +13,7 @@ int main()
 
     PrivateKey::Uptrc myPrivateKey = CryptoPP_ECDSA_PrivateKey::createInstance();
 
-    CryptoPP_ECDSA_SigEncodePrivateCtx mySigEncodePrivateCtx;
+    CryptoPP_ECDSA_SHA_256_SigEncodePrivateCtx mySigEncodePrivateCtx;
     
     mySigEncodePrivateCtx.SetKey(*myPrivateKey);
     
@@ -40,15 +38,14 @@ int main()
         std::cout << error.Message() << std::endl;
         return 0;
     }
-
     std::cout << "------------------------------\n";
 
     /************************************************************
     *                   MsgRecoveryPublicCtx                    *
     ************************************************************/
-    CryptoPP_ECDSA_MsgRecoveryPublicCtx myMsgRecoveryPublicCtx;
+    CryptoPP_ECDSA_SHA_256_MsgRecoveryPublicCtx myMsgRecoveryPublicCtx;
 
-    PublicKey::Uptrc myPublicKey = CryptoPP_ECDSA_PublicKey::createInstance();
+    PublicKey::Uptrc myPublicKey = CryptoPP_ECDSA_SHA_256_PublicKey::createInstance();
     
     myMsgRecoveryPublicCtx.SetKey(*myPublicKey);
     
@@ -65,7 +62,7 @@ int main()
         // get recoveryMessage
         auto recoveryMessage = _result2.Value();
         
-        printVector("recovery message: ",recoveryMessage);
+        printVector(recoveryMessage, "recovery message: ");
         
         printHex(recoveryMessage);  // vector
     }
@@ -74,8 +71,6 @@ int main()
         std::cout << "--- error ---\n";
         ara::core::ErrorCode error = _result2.Error();
         std::cout << error.Message() << std::endl;
-        return 0;
     }
-
     return 0;
 }

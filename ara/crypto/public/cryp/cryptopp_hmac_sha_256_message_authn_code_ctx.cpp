@@ -46,14 +46,14 @@ namespace ara
                 if( transform != CryptoTransform::kMacGenerate && 
                     transform != CryptoTransform::kMacVerify) // return error
                 {
-                    return ara::core::Result<void>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kUsageViolation,5));
+                    return ara::core::Result<void>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kUsageViolation, NoSupplementaryDataForErrorDescription));
                 }
 
                 try
                 {
-                    const CryptoPP_AES_SymmetricKey& aesKey = dynamic_cast<const CryptoPP_AES_SymmetricKey&>(key);
-                    mKey = new CryptoPP_AES_SymmetricKey(aesKey);
-                    hmac.SetKey(mKey->getKey(), mKey->getKey().size());
+                    const CryptoPP_HMAC_SHA_256_SymmetricKey& aesKey = dynamic_cast<const CryptoPP_HMAC_SHA_256_SymmetricKey&>(key);
+                    mKey = new CryptoPP_HMAC_SHA_256_SymmetricKey(aesKey);
+                    hmac.SetKey(mKey->getValue(), mKey->getValue().size());
 
                     mTransform = transform;
                     mSetKeyState = helper::setKeyState::CALLED;
@@ -63,7 +63,7 @@ namespace ara
                 catch (const std::bad_cast& e) // return error
                 {
                     // Failed to cast SymmetricKey to CryptoPP_AES_SymmetricKey
-                    return ara::core::Result<void>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kIncompatibleObject,5));
+                    return ara::core::Result<void>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kIncompatibleObject, NoSupplementaryDataForErrorDescription));
                 }
             }
 
@@ -71,7 +71,7 @@ namespace ara
             {
                 if(mSetKeyState == helper::setKeyState::NOT_CALLED) // return error
                 {
-                    return ara::core::Result<void>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kUninitializedContext,5));
+                    return ara::core::Result<void>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kUninitializedContext, NoSupplementaryDataForErrorDescription));
                 }
                 else if(iv.empty()) // no IV is passed
                 {
@@ -82,7 +82,7 @@ namespace ara
                 }
                 else // return error
                 {
-                    return ara::core::Result<void>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kUnsupported,5));
+                    return ara::core::Result<void>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kUnsupported, NoSupplementaryDataForErrorDescription));
                 }
             }
 
@@ -99,7 +99,7 @@ namespace ara
             {
                 if(seq == helper::calling::START_IS_NOT_CALLED) // return error
                 {
-                    return ara::core::Result<void>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kProcessingNotStarted,5));
+                    return ara::core::Result<void>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kProcessingNotStarted, NoSupplementaryDataForErrorDescription));
                 }
 
                 seq = helper::calling::UPDATE_IS_CALLED;
@@ -112,7 +112,7 @@ namespace ara
             {
                 if(seq == helper::calling::START_IS_NOT_CALLED) // return errror
                 {
-                    return ara::core::Result<void>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kProcessingNotStarted,5));
+                    return ara::core::Result<void>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kProcessingNotStarted, NoSupplementaryDataForErrorDescription));
                 }
 
                 seq = helper::calling::UPDATE_IS_CALLED;
@@ -125,7 +125,7 @@ namespace ara
             {
                 if(seq == helper::calling::START_IS_NOT_CALLED) // return error
                 {
-                    return ara::core::Result<Signature::Uptrc>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kProcessingNotStarted,5));
+                    return ara::core::Result<Signature::Uptrc>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kProcessingNotStarted, NoSupplementaryDataForErrorDescription));
                 }
                 else if(seq == helper::calling::UPDATE_IS_CALLED)
                 {
@@ -153,7 +153,7 @@ namespace ara
                 }
                 else // return error
                 {
-                    return ara::core::Result<Signature::Uptrc>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kInvalidUsageOrder,5));
+                    return ara::core::Result<Signature::Uptrc>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kInvalidUsageOrder, NoSupplementaryDataForErrorDescription));
                 }
             }
 
@@ -171,7 +171,7 @@ namespace ara
                 }
                 else // return error
                 {
-                    return ara::core::Result<ara::core::Vector<ara::core::Byte>>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kProcessingNotStarted,5));
+                    return ara::core::Result<ara::core::Vector<ara::core::Byte>>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kProcessingNotStarted, NoSupplementaryDataForErrorDescription));
                 }
             }
 

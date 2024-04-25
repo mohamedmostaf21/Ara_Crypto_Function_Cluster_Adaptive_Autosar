@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include "../ara/crypto/public/cryp/cryobj/cryptopp_aes_symmetric_key.h"
 #include "../ara/crypto/public/cryp/cryptopp_auth_cipher_ctx.h"
 #include "../ara/crypto/private/common/mem_region.h"

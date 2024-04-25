@@ -3,7 +3,7 @@
 
 #include "../../private/cryp/encryptor_public_ctx.h"
 #include "cryobj/cryptopp_crypto_primitive_id.h"
-#include "cryobj/cryptopp_rsa_public_key.h"
+#include "cryobj/cryptopp_rsa_2046_public_key.h"
 #include "../../helper/state.h"
 
 namespace ara
@@ -12,16 +12,6 @@ namespace ara
     {
         namespace cryp
         {
-            /*
-                this helper class doesnot be mentioned in autosar 
-            */
-            /*
-            enum class setKeyState
-            {
-                CALLED,
-                NOT_CALLED
-            };
-            */
             class CryptoPP_RSA_EncryptorPublicCtx : public EncryptorPublicCtx 
             {
             public :
@@ -32,43 +22,34 @@ namespace ara
 
             private:
                 /*****************  attributes **********************/
-                CryptoPP_RSA_PublicKey *mKey;
+                CryptoPP_RSA_2046_PublicKey *mKey;
                 CryptoPP_CryptoPrimitiveId mPId;
                 helper::setKeyState mSetKeyState;
 
             public:
-                using Uptr = std::unique_ptr<CryptoPP_RSA_EncryptorPublicCtx>;
-
-                /***************** constructor **********************/
-                
+                /***************** constructor **********************/   
                 CryptoPP_RSA_EncryptorPublicCtx();
 
 
-
                 /****** override pure virtual functions related to CryptoContext *****/
-
-                /*
-                    Return CryptoPrimitivId instance containing instance identification
-                */
-                virtual CryptoPrimitiveId::Uptr GetCryptoPrimitiveId () const noexcept override;
+                //  Return CryptoPrimitivId instance containing instance identification
+                CryptoPrimitiveId::Uptr GetCryptoPrimitiveId () const noexcept override;
 
                 /*
                     Check if the crypto context is already initialized and ready to use. 
                     It checks all required values, including: key value, IV/seed, etc
                 */
-                virtual bool IsInitialized () const noexcept override;
+                bool IsInitialized () const noexcept override;
 
 
-
-                /***** override pure virtual functions inherited related SymmetricBlockCipherCtx *****/
-
-                virtual ara::core::Result<ara::core::Vector<ara::core::Byte> > ProcessBlock ( ReadOnlyMemRegion in,
+                /***** override pure virtual functions inherited related EncryptorPublicCtx *****/
+                ara::core::Result<ara::core::Vector<ara::core::Byte> > ProcessBlock ( ReadOnlyMemRegion in,
                                                                                             bool suppressPadding=false
                                                                                             ) const noexcept override;
 
-                virtual ara::core::Result<void> SetKey (const PublicKey &key) noexcept override;
+                ara::core::Result<void> SetKey (const PublicKey &key) noexcept override;
                 
-                //virtual ara::core::Result<void> Reset () noexcept override;
+                // ara::core::Result<void> Reset () noexcept override;
             };
         }
     }

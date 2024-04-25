@@ -40,7 +40,7 @@ namespace ara
 
             ara::core::Result<bool> Cryptopp_AuthCipherCtx::Check (const Signature &expected) const noexcept
             {
-                // Assuming 'digest' is a member variable that stores the calculated MAC
+                 // Assuming 'digest' is a member variable that stores the calculated MAC
                 // Compare the expected tag with the calculated one
                 // If they are equal, return true, else return false
                 CryptoPP_HMAC_SHA256_Signature& expectedSign = (CryptoPP_HMAC_SHA256_Signature&)expected;
@@ -312,9 +312,9 @@ namespace ara
             ara::core::Result<ara::core::Vector<ara::core::Byte> > Cryptopp_AuthCipherCtx::ProcessConfidentialData (ReadOnlyMemRegion in, ara::core::Optional<ReadOnlyMemRegion> expectedTag) noexcept 
             {
            
-                if(this->m_confidentialDataProcessed){
-                    throw std::logic_error("Confidential data already processed, can't process asscociated data");
-                }
+                // if(!this->m_confidentialDataProcessed){
+                //     throw std::logic_error("Confidential data already processed, can't process asscociated data");
+                // }
                 //updata the digest with the confidential data
                 auto result = Update(in);
                 if(!result){

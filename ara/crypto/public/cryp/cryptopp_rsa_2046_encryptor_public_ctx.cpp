@@ -8,8 +8,6 @@ namespace ara
     {
         namespace cryp
         {
-            extern CryptoErrorDomain _obj;
-
             const std::string CryptoPP_RSA_EncryptorPublicCtx::mAlgName("rsa_2046");
 
             /***************** constructor **********************/
@@ -22,7 +20,6 @@ namespace ara
 
 
             /****** override pure virtual functions related to CryptoContext *****/
-
             /*
                 Return CryptoPrimitivId instance containing instance identification
             */
@@ -41,41 +38,47 @@ namespace ara
             }
 
             
-            
-            /***** override pure virtual functions inherited related SymmetricBlockCipherCtx *****/
+
+            /***** override pure virtual functions inherited related EncryptorPublicCtx *****/
 
             ara::core::Result<ara::core::Vector<ara::core::Byte> > CryptoPP_RSA_EncryptorPublicCtx::ProcessBlock ( ReadOnlyMemRegion in,
                                                                                   bool suppressPadding
                                                                                 ) const noexcept
             {
-                if(mSetKeyState == helper::setKeyState::NOT_CALLED)
+                if(mSetKeyState == helper::setKeyState::NOT_CALLED) // return error
                 {   
-                    ara::core::ErrorCode x =  ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kUninitializedContext,5); 
-                    return ara::core::Result<ara::core::Vector<ara::core::Byte>>::FromError(x);
+                    return ara::core::Result<ara::core::Vector<ara::core::Byte>>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kUninitializedContext, NoSupplementaryDataForErrorDescription));
                 }
-
-                try 
+                else if(!in.size())
                 {
-                    CryptoPP::RSAES_OAEP_SHA_Encryptor encryptor(mKey->getKey());
+                    return ara::core::Result<ara::core::Vector<ara::core::Byte>>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kInvalidInputSize, NoSupplementaryDataForErrorDescription));
+                }
+                else
+                {
+                    if(suppressPadding && in.size() != 2046)
+                    {
+                        return ara::core::Result<ara::core::Vector<ara::core::Byte>>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kInvalidInputSize, NoSupplementaryDataForErrorDescription));
+                    }
+                    else
+                    {
+                        CryptoPP::RSAES_OAEP_SHA_Encryptor encryptor(mKey->getValue());
 
-                    std::string cipher;                
-                    std::string plain(in.begin(), in.end());
-                    std::cout << "Input Data: " << plain << std::endl;
+                        std::string outputString;                
+                        std::string inputString(in.begin(), in.end());
+                        //std::cout << "Input Data: " << plain << std::endl;
 
-                    // Initialize a random number generator
-                    CryptoPP::AutoSeededRandomPool prng;
+                        // Initialize a random number generator
+                        CryptoPP::AutoSeededRandomPool prng;
 
-                    CryptoPP::StringSource( plain,
+                        CryptoPP::StringSource( 
+                                inputString,
                                 true,
-                                new CryptoPP::PK_EncryptorFilter(prng, encryptor, new CryptoPP::StringSink(cipher))
-                                );
+                                new CryptoPP::PK_EncryptorFilter(prng, encryptor, new CryptoPP::StringSink(outputString))
+                        );
 
-                    ara::core::Vector<ara::core::Byte> encryptedData(cipher.begin(), cipher.end());
-                    return ara::core::Result<ara::core::Vector<ara::core::Byte>>(encryptedData);
-                } 
-                catch (const CryptoPP::Exception& e) {
-                    std::cerr << "Crypto++ exception: " << e.what() << std::endl;
-                    return ara::core::Result<ara::core::Vector<ara::core::Byte>>(ara::core::Vector<ara::core::Byte>());
+                        ara::core::Vector<ara::core::Byte> outputVector(outputString.begin(), outputString.end());
+                        return ara::core::Result<ara::core::Vector<ara::core::Byte>>(outputVector);
+                    }
                 }
             }
 
@@ -83,17 +86,17 @@ namespace ara
             {
                 try
                 {
-                    const CryptoPP_RSA_PublicKey& rsaKey = dynamic_cast<const CryptoPP_RSA_PublicKey&>(key);
-                    mKey = new CryptoPP_RSA_PublicKey(rsaKey);
+                    const CryptoPP_RSA_2046_PublicKey& rsaKey = dynamic_cast<const CryptoPP_RSA_2046_PublicKey&>(key);
+                    mKey = new CryptoPP_RSA_2046_PublicKey(rsaKey);
                 
                     mSetKeyState = helper::setKeyState::CALLED;
                     
                     return ara::core::Result<void>::FromValue();
                 }
-                catch (const std::bad_cast& e) {
-                    std::cerr << "Failed to cast PublicKey to CryptoPP_RSA_PublicKey: " << e.what() << std::endl;
-                    ara::core::ErrorCode x =  ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kIncompatibleObject,5); 
-                    return ara::core::Result<void>::FromError(x);
+                catch (const std::bad_cast& e) // return error
+                {
+                    // Failed to cast PublicKey to CryptoPP_RSA_PublicKey
+                    return ara::core::Result<void>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kIncompatibleObject, NoSupplementaryDataForErrorDescription));
                 }
             }
             

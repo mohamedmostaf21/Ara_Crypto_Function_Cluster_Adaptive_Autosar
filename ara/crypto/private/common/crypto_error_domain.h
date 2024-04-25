@@ -5,6 +5,8 @@
 #include "../../../core/error_code.h"
 #include "../../../core/exception.h"
 
+#define NoSupplementaryDataForErrorDescription 0
+
 namespace ara
 {
     namespace crypto
@@ -67,9 +69,7 @@ namespace ara
             
             /********** constructor ********/
             constexpr CryptoErrorDomain () noexcept: ErrorDomain(ara::core::ErrorDomain::CRYPTO_DOMAIN)
-            {
-
-            }
+            {}
             
             /*********** override parent functions */
             const char* Name () const noexcept override
@@ -201,7 +201,7 @@ namespace ara
         */
         static CryptoErrorDomain _obj;
         constexpr ara::core::ErrorCode MakeErrorCode( CryptoErrorDomain::Errc code,
-                                                        ara::core::ErrorDomain::SupportDataType data
+                                                      ara::core::ErrorDomain::SupportDataType data
                                                     ) noexcept
         {
             /* 

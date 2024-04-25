@@ -2,15 +2,6 @@
 #include "../../private/common/crypto_error_domain.h"
 
 
-std::string bytes_to_hex(const uint8_t* data, size_t size) {
-    std::stringstream ss;
-    ss << std::hex << std::setfill('0');
-    for (size_t i = 0; i < size; ++i) {
-        ss << std::setw(2) << static_cast<int>(data[i]);
-    }
-    return ss.str();
-}
-
 namespace ara
 {
     namespace crypto

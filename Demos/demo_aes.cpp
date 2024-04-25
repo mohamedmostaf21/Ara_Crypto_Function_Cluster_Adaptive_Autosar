@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../ara/crypto/public/cryp/cryobj/cryptopp_aes_symmetric_key.h"
+#include "../ara/crypto/public/cryp/cryobj/cryptopp_aes_128_symmetric_key.h"
 #include "../ara/crypto/public/cryp/cryptopp_aes_symmetric_block_cipher_ctx.h"
 #include "../ara/crypto/helper/print.h"
 #include "../ara/crypto/private/common/entry_point.h"
@@ -26,7 +26,7 @@ int main()
         return 0;
     }
 
-    auto aes_contextCreate = myProvider->CreateSymmetricBlockCipherCtx(1);
+    auto aes_contextCreate = myProvider->CreateSymmetricBlockCipherCtx(AES_ECB_128_ALG_ID);
 
     if(!aes_contextCreate.HasValue())
     {
@@ -34,7 +34,7 @@ int main()
         return 0;
     }
 
-    SymmetricKey::Uptrc myKey = CryptoPP_AES_SymmetricKey::createInstance();
+    SymmetricKey::Uptrc myKey = CryptoPP_AES_128_SymmetricKey::createInstance();
     
     auto aes_context = std::move(aes_contextCreate).Value();
     

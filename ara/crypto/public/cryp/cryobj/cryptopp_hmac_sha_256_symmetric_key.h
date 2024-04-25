@@ -1,5 +1,5 @@
-#ifndef CRYPTOPP_AES_SUMMETRIC_KEY_H
-#define CRYPTOPP_AES_SUMMETRIC_KEY_H
+#ifndef CRYPTOPP_HMAC_SHA_256_SUMMETRIC_KEY_H
+#define CRYPTOPP_HMAC_SHA_256_SUMMETRIC_KEY_H
 
 #include <cryptopp/cryptlib.h>
 #include <cryptopp/secblock.h>
@@ -17,7 +17,7 @@ namespace ara
     {
         namespace cryp
         {
-            class CryptoPP_AES_SymmetricKey : public SymmetricKey
+            class CryptoPP_HMAC_SHA_256_SymmetricKey : public SymmetricKey
             {
             private:
                 /*************** attributes *************/
@@ -25,17 +25,17 @@ namespace ara
 
             public:
                 /************ constructor **************/
-                CryptoPP_AES_SymmetricKey() : mValue(default_key_length_in_Byte)
+                CryptoPP_HMAC_SHA_256_SymmetricKey() : mValue(default_key_length_in_Byte)
                 {}
 
                 /************ Copy constructor *********/
-                CryptoPP_AES_SymmetricKey(const CryptoPP_AES_SymmetricKey& other) : mValue(other.mValue.size()) {
+                CryptoPP_HMAC_SHA_256_SymmetricKey(const CryptoPP_HMAC_SHA_256_SymmetricKey& other) : mValue(other.mValue.size()) {
                     mValue.Assign(other.mValue, other.mValue.size());
                 }
 
-                CryptoPP_AES_SymmetricKey(const SymmetricKey& obj)
+                CryptoPP_HMAC_SHA_256_SymmetricKey(const SymmetricKey& obj)
                 { 
-                   mValue = ((CryptoPP_AES_SymmetricKey)obj).mValue;
+                   mValue = ((CryptoPP_HMAC_SHA_256_SymmetricKey)obj).mValue;
                 }
                 
                 /*************************************************************
@@ -43,7 +43,7 @@ namespace ara
                 **************************************************************/
                 static std::unique_ptr<SymmetricKey> createInstance() 
                 {
-                    std::unique_ptr<CryptoPP_AES_SymmetricKey> ptr = std::make_unique<CryptoPP_AES_SymmetricKey>();
+                    std::unique_ptr<CryptoPP_HMAC_SHA_256_SymmetricKey> ptr = std::make_unique<CryptoPP_HMAC_SHA_256_SymmetricKey>();
                     
                     std::string key = "0123456789abcdef";
                     ptr->mValue.Assign((const CryptoPP::byte*)key.data(), CryptoPP::AES::DEFAULT_KEYLENGTH);
@@ -52,12 +52,12 @@ namespace ara
                 }
 
                 /************ getter and setter ***********/
-                CryptoPP::SecByteBlock getKey()
+                CryptoPP::SecByteBlock getValue()
                 {
                     return mValue;
                 }
 
-                void setKey(CryptoPP::SecByteBlock mValue)
+                void setValue(CryptoPP::SecByteBlock mValue)
                 {
                     this->mValue = mValue;
                 }
@@ -65,12 +65,12 @@ namespace ara
                 /************* override parent functions ************/
                 Usage GetAllowedUsage () const noexcept override
                 {
-                    return kAllowKdfMaterialAnyUsage;
+                    return kAllowSignature;
                 }
 
                 std::size_t GetPayloadSize () const noexcept override
                 {
-                    return 16;
+                    return 32;
                 }
 
                 /*

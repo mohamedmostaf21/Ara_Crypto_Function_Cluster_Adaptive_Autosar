@@ -1,7 +1,6 @@
 #ifndef LOAD_KEY
 #define LOAD_KEY
 
-
 // Include necessary header files for Crypto++ library
 #include <cryptopp/rsa.h>
 #include <cryptopp/osrng.h>

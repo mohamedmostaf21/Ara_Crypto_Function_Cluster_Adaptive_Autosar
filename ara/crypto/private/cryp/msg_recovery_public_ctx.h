@@ -1,8 +1,8 @@
 #ifndef MSG_RECOVERY_PUBLIC_CTX_H     
 #define MSG_RECOVERY_PUBLIC_CTX_H
 
-#include "../../../core/result.h"
 #include "../../../core/utility.h"
+#include "../common/mem_region.h"
 #include "crypto_context.h"
 #include "cryobj/public_key.h"
 

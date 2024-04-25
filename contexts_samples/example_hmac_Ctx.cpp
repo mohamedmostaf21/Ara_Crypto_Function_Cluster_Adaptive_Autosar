@@ -1,5 +1,6 @@
 #include <iostream>
 #include "../ara/crypto/public/cryp/cryptopp_hmac_sha_256_message_authn_code_ctx.h"
+#include "../ara/crypto/public/cryp/cryobj/cryptopp_aes_symmetric_key.h"
 #include "../ara/crypto/public/cryp/cryobj/cryptopp_hmac_sha_256_signature.h"
 #include "../ara/crypto/private/common/mem_region.h"
 #include "../ara/crypto/helper/print.h"

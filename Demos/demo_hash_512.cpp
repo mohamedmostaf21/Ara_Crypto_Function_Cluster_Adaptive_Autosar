@@ -25,7 +25,7 @@ int main()
         return 0;
     }
 
-    auto hash512Create = myProvider->CreateHashFunctionCtx(2);
+    auto hash512Create = myProvider->CreateHashFunctionCtx(SHA_512_ALG_ID);
 
     if(!hash512Create.HasValue())
     {

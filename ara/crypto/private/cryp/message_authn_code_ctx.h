@@ -1,12 +1,11 @@
 #ifndef MESSAGE_AUTH_CODE_CTX
 #define MESSAGE_AUTH_CODE_CTX
 
-#include "../../../core/result.h"
 #include "../../../core/utility.h"
+#include "../common/mem_region.h"
 #include "crypto_context.h"
 #include "cryobj/symmetric_key.h"
 #include "cryobj/signature.h"
-#include "../common/mem_region.h"
 
 namespace ara
 {

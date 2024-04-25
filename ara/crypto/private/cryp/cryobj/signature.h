@@ -25,5 +25,4 @@ namespace ara
 
 }
 
-
-#endif /* SIGNATURE_H */
+#endif

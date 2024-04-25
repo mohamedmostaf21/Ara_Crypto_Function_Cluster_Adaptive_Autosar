@@ -32,4 +32,4 @@ namespace ara
     }
 }
 
-#endif /* SET_KEY_STATE_H */
+#endif

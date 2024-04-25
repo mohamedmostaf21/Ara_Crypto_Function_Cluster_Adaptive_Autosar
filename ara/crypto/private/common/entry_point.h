@@ -2,10 +2,7 @@
 #define ENTRY_POINT_H
 
 #include <cstdint>
-#include "../../../core/Span.h"
 #include "../../../core/result.h"
-#include "../../../core/vector.h"
-#include "../../../core/utility.h"
 #include "../../../core/instance_specifier.h"
 #include "../../public/cryp/cryptopp_crypto_provider.h"
 
@@ -45,4 +42,4 @@ namespace ara
     }
 }
 
-#endif /* ENTRY_POINT_H */
+#endif

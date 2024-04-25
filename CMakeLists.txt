@@ -72,11 +72,12 @@ add_library(
    
    ######### public ##########
    ara/crypto/public/cryp/cryobj/cryptopp_aes_symmetric_key.h
+   ara/crypto/public/cryp/cryobj/cryptopp_aes_128_symmetric_key.h
    ara/crypto/public/cryp/cryobj/cryptopp_crypto_primitive_id.h
    ara/crypto/public/cryp/cryobj/cryptopp_rsa_private_key.h
    ara/crypto/public/cryp/cryobj/cryptopp_rsa_public_key.h
-   ara/crypto/public/cryp/cryobj/cryptopp_ecdsa_public_key.h
-   ara/crypto/public/cryp/cryobj/cryptopp_ecdsa_private_key.h
+   ara/crypto/public/cryp/cryobj/cryptopp_ecdsa_sha_256_public_key.h
+   ara/crypto/public/cryp/cryobj/cryptopp_ecdsa_sha_256_private_key.h
    ara/crypto/public/cryp/cryobj/cryptopp_hmac_sha_256_signature.h
    ara/crypto/public/cryp/cryobj/cryptopp_hmac_sha_512_signature.h
    ara/crypto/public/cryp/cryobj/loadKey.h
@@ -90,6 +91,9 @@ add_library(
 
    ara/crypto/public/cryp/cryptopp_aes_symmetric_block_cipher_ctx.h
    ara/crypto/public/cryp/cryptopp_aes_symmetric_block_cipher_ctx.cpp
+
+   ara/crypto/public/cryp/cryptopp_aes_ecb_128_symmetric_block_cipher_ctx.h
+   ara/crypto/public/cryp/cryptopp_aes_ecb_128_symmetric_block_cipher_ctx.cpp
    
    ara/crypto/public/cryp/cryptopp_auth_cipher_ctx.h
    ara/crypto/public/cryp/cryptopp_auth_cipher_ctx.cpp
@@ -109,11 +113,11 @@ add_library(
    ara/crypto/public/cryp/cryptopp_hmac_sha_512_message_authn_code_ctx.h
    ara/crypto/public/cryp/cryptopp_hmac_sha_512_message_authn_code_ctx.cpp 
 
-   ara/crypto/public/cryp/cryptopp_ecdsa_sig_encode_private_ctx.h
-   ara/crypto/public/cryp/cryptopp_ecdsa_sig_encode_private_ctx.cpp
+   ara/crypto/public/cryp/cryptopp_ecdsa_sha_256_sig_encode_private_ctx.h
+   ara/crypto/public/cryp/cryptopp_ecdsa_sha_256_sig_encode_private_ctx.cpp
 
-   ara/crypto/public/cryp/cryptopp_ecdsa_msg_recovery_public_ctx.h
-   ara/crypto/public/cryp/cryptopp_ecdsa_msg_recovery_public_ctx.cpp
+   ara/crypto/public/cryp/cryptopp_ecdsa_sha_256_msg_recovery_public_ctx.h
+   ara/crypto/public/cryp/cryptopp_ecdsa_sha_256_msg_recovery_public_ctx.cpp
 
    ara/crypto/public/cryp/cryptopp_crypto_provider.h
    ara/crypto/public/cryp/cryptopp_crypto_provider.cpp
@@ -229,3 +233,7 @@ target_link_libraries(demo_hash_256 ${Crypto++_LIBRARIES})
 add_executable(demo_hash_512 Demos/demo_hash_512.cpp)
 target_link_libraries(demo_hash_512 Crypto)
 target_link_libraries(demo_hash_512 ${Crypto++_LIBRARIES})
+
+add_executable(demo_ecdsa Demos/demo_ecdsa.cpp)
+target_link_libraries(demo_ecdsa Crypto)
+target_link_libraries(demo_ecdsa ${Crypto++_LIBRARIES})

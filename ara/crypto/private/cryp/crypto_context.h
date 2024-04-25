@@ -1,7 +1,6 @@
 #ifndef CRYPTO_CONTEXT_H
 #define CRYPTO_CONTEXT_H
 
-#include "../common/base_id_types.h"
 #include "cryobj/crypto_primitive_id.h"
 
 namespace ara

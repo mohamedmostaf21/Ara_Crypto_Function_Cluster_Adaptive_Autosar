@@ -26,7 +26,7 @@ int main()
         return 0;
     }
 
-    auto hash256Create = myProvider->CreateHashFunctionCtx(1);
+    auto hash256Create = myProvider->CreateHashFunctionCtx(SHA_256_ALG_ID);
 
     if(!hash256Create.HasValue())
     {

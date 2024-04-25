@@ -25,7 +25,7 @@ int main()
         return 0;
     }
 
-    auto hmac512Create = myProvider->CreateMessageAuthCodeCtx(2);
+    auto hmac512Create = myProvider->CreateMessageAuthCodeCtx(HMAC_SHA_512_ALG_ID);
 
     if(!hmac512Create.HasValue())
     {

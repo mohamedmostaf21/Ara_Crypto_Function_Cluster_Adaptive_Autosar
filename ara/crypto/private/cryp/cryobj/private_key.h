@@ -17,7 +17,7 @@ namespace ara
                 
                 static const CryptoObjectType kObjectType = CryptoObjectType::kPrivateKey;
                 
-                //virtual ara::core::Result<PublicKey::Uptrc> GetPublicKey () const noexcept=0;
+                virtual ara::core::Result<PublicKey::Uptrc> GetPublicKey () const noexcept=0;
             };
         }
     }

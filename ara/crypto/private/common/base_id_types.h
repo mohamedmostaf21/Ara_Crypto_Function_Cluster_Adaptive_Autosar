@@ -53,7 +53,6 @@ namespace ara
         const CryptoAlgId kAlgIdAny = kAlgIdUndefined;
         const CryptoAlgId kAlgIdDefault = kAlgIdUndefined;
         const CryptoAlgId kAlgIdNone = kAlgIdUndefined;
-
         const AllowedUsageFlags kAllowPrototypedOnly = 0;
         const AllowedUsageFlags kAllowDataEncryption = 0x0001;
         const AllowedUsageFlags kAllowDataDecryption = 0x0002;
@@ -76,7 +75,6 @@ namespace ara
         const AllowedUsageFlags kAllowDerivedKeyImporting = kAllowKeyImporting << 16;
         const AllowedUsageFlags kAllowDerivedSignature = kAllowSignature << 16;
         const AllowedUsageFlags kAllowDerivedVerification = kAllowVerification << 16;
-
         const AllowedUsageFlags kAllowKdfMaterialAnyUsage = kAllowKdfMaterial | kAllowDerivedDataEncryption 
                                                                             | kAllowDerivedDataDecryption 
                                                                             | kAllowDerivedSignature 

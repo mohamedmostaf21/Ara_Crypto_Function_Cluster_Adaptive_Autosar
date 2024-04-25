@@ -3,17 +3,9 @@
 
 #include "../../private/cryp/hash_function_ctx.h"
 #include "cryobj/cryptopp_crypto_primitive_id.h"
-#include <cryptopp/cryptlib.h>
-#include <cryptopp/filters.h>
-#include <cryptopp/hex.h>
 #include <cryptopp/sha.h>
 #include <cryptopp/secblock.h>
-#include "cryptopp/files.h"
 #include "../../helper/state.h"
-#include <iostream>
-#include <sstream>
-#include <iomanip>
-
 
 namespace ara
 {
@@ -21,17 +13,13 @@ namespace ara
     {
         namespace cryp
         {
-            /*
-                this helper class doesnot be mentioned in autosar 
-            */
-
-            using namespace helper;
             class CryptoPP_SHA_256_HashFunctionCtx: public HashFunctionCtx 
             {
             public :
                 /******************* constants **********************/
                 static const std::string mAlgName;
-                const CryptoPrimitiveId::AlgId mAlgId = 1;
+                static const CryptoPrimitiveId::AlgId mAlgId{1};
+
             
             private:
                 /***************************** attributes *******************/
@@ -41,23 +29,22 @@ namespace ara
                 helper::calling seq;
 
             public:  
-                /********************** constructor **************************/
-                
+                /********************** constructor **************************/  
                 CryptoPP_SHA_256_HashFunctionCtx();
 
 
                 /****** override pure virtual functions related to CryptoContext *****/
+                CryptoPrimitiveId::Uptr GetCryptoPrimitiveId () const noexcept override;
 
-                virtual CryptoPrimitiveId::Uptr GetCryptoPrimitiveId () const noexcept override;
-
-                virtual bool IsInitialized () const noexcept override;
+                bool IsInitialized () const noexcept override;
 
 
                 /***** override pure virtual functions inherited related HashFunctionCtx *****/
+                ara::core::Result<void> Start () noexcept override;
 
-                virtual ara::core::Result<void> Start () noexcept override;
+                ara::core::Result<void> Start (ReadOnlyMemRegion iv) noexcept override;
 
-                virtual ara::core::Result<void> Start (ReadOnlyMemRegion iv) noexcept override;
+                // ara::core::Result<void> Start (const SecretSeed &iv) noexcept;
 
                 ara::core::Result<void> Update (std::uint8_t in) noexcept override;
 
@@ -67,10 +54,9 @@ namespace ara
                 
                 ara::core::Result<ara::core::Vector<ara::core::Byte> > GetDigest(std::size_t offset=0) noexcept override;
             
-                //virtual DigestService::Uptr GetDigestService () const noexcept;
 
-                //virtual ara::core::Result<void> Start (const SecretSeed &iv) noexcept;
-                
+                // DigestService::Uptr GetDigestService () const noexcept;
+
                 // ara::core::Result<void> Update (const RestrictedUseObject &in) noexcept;
             };
         }

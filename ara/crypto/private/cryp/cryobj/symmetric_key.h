@@ -3,7 +3,6 @@
 
 #include "restricted_use_object.h"
 
-
 namespace ara
 {
     namespace crypto
@@ -20,6 +19,5 @@ namespace ara
         }
     }
 }
-
 
 #endif
