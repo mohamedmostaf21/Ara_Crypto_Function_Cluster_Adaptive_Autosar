@@ -122,8 +122,7 @@ add_library(
    ara/crypto/public/cryp/cryptopp_ecdsa_sha_256_msg_recovery_public_ctx.h
    ara/crypto/public/cryp/cryptopp_ecdsa_sha_256_msg_recovery_public_ctx.cpp
 
-   ara/crypto/public/cryp/cryptopp_aes_cbc_128_stream_cipher_ctx.h
-   ara/crypto/public/cryp/cryptopp_aes_cbc_128_stream_cipher_ctx.cpp
+
 
    ara/crypto/public/cryp/cryptopp_crypto_provider.h
    ara/crypto/public/cryp/cryptopp_crypto_provider.cpp
