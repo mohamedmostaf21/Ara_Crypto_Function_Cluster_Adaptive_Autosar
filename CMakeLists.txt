@@ -73,6 +73,7 @@ add_library(
    ######### public ##########
    ara/crypto/public/cryp/cryobj/cryptopp_aes_symmetric_key.h
    ara/crypto/public/cryp/cryobj/cryptopp_aes_128_symmetric_key.h
+   ara/crypto/public/cryp/cryobj/cryptopp_symmetric_key.h
    ara/crypto/public/cryp/cryobj/cryptopp_crypto_primitive_id.h
    ara/crypto/public/cryp/cryobj/cryptopp_rsa_private_key.h
    ara/crypto/public/cryp/cryobj/cryptopp_rsa_public_key.h
@@ -121,6 +122,9 @@ add_library(
    ara/crypto/public/cryp/cryptopp_ecdsa_sha_256_msg_recovery_public_ctx.h
    ara/crypto/public/cryp/cryptopp_ecdsa_sha_256_msg_recovery_public_ctx.cpp
 
+   ara/crypto/public/cryp/cryptopp_aes_cbc_128_stream_cipher_ctx.h
+   ara/crypto/public/cryp/cryptopp_aes_cbc_128_stream_cipher_ctx.cpp
+
    ara/crypto/public/cryp/cryptopp_crypto_provider.h
    ara/crypto/public/cryp/cryptopp_crypto_provider.cpp
 )
@@ -160,6 +164,7 @@ add_executable(mac CryptoPP_examples/hmac_sha256.cpp)
 target_include_directories(mac PUBLIC ${Crypto++_INCLUDE_DIRS})
 target_link_libraries(mac ${Crypto++_LIBRARIES})
 
+
 ## ecdsa example using CryptoPP
 add_executable(ecdsa CryptoPP_examples/ESDSA.cpp)
 target_include_directories(ecdsa PUBLIC ${Crypto++_INCLUDE_DIRS})
@@ -170,9 +175,9 @@ add_executable(ECDSA_keysGeneration CryptoPP_examples/ECDSA_PUK_PRK_generation.c
 target_include_directories(ECDSA_keysGeneration PUBLIC ${Crypto++_INCLUDE_DIRS})
 target_link_libraries(ECDSA_keysGeneration ${Crypto++_LIBRARIES})
 
-###################################################
-#            executables for trying              #
-###################################################
+# ###################################################
+# #            executables for trying              #
+# ###################################################
 
 add_executable(ex_span samples/example_span.cpp)
 
@@ -239,3 +244,7 @@ target_link_libraries(demo_hash_512 ${Crypto++_LIBRARIES})
 add_executable(demo_ecdsa Demos/demo_ecdsa.cpp)
 target_link_libraries(demo_ecdsa Crypto)
 target_link_libraries(demo_ecdsa ${Crypto++_LIBRARIES})
+
+add_executable(demo_aes_cbc Demos/demo_aes_cbc.cpp)
+target_link_libraries(demo_aes_cbc Crypto)
+target_link_libraries(demo_aes_cbc ${Crypto++_LIBRARIES})

@@ -11,6 +11,7 @@
 #include "cryptopp_rsa_2046_decryptor_private_ctx.h"
 #include "cryptopp_ecdsa_sha_256_sig_encode_private_ctx.h"
 #include "cryptopp_ecdsa_sha_256_msg_recovery_public_ctx.h"
+#include "cryptopp_aes_cbc_128_stream_cipher_ctx.h"
 
 #define SHA_256_ALG_ID       1
 #define SHA_512_ALG_ID       5
@@ -19,6 +20,7 @@
 #define AES_ECB_128_ALG_ID   3
 #define RSA_2048_ALG_ID      4
 #define ECDSA_SHA_256_ALG_ID 2
+#define AES_CBC_128_ALG_ID   7
 
 namespace ara
 {
@@ -46,6 +48,8 @@ namespace ara
                 ara::core::Result<MsgRecoveryPublicCtx::Uptr> CreateMsgRecoveryPublicCtx (AlgId algId) noexcept override;
 
                 ara::core::Result<SigEncodePrivateCtx::Uptr> CreateSigEncodePrivateCtx (AlgId algId) noexcept override;
+
+                ara::core::Result<StreamCipherCtx::Uptr> CreateStreamCipherCtx (AlgId algId) noexcept override;
             
                 ara::core::Result<PrivateKey::Uptrc> GeneratePrivateKey ( AlgId algId, 
                                                                           AllowedUsageFlags allowedUsage, 

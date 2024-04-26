@@ -14,8 +14,12 @@ namespace ara
                     return SHA_256_ALG_ID;
                 else if(primitiveName == "HMAC_SHA_256_ALG")
                     return HMAC_SHA_256_ALG_ID;
+                else if(primitiveName == "HMAC_SHA_512_ALG")
+                    return HMAC_SHA_512_ALG_ID;
                 else if(primitiveName == "AES_ECB_128_ALG")
                     return AES_ECB_128_ALG_ID;
+                else if(primitiveName == "AES_CBC_128_ALG")
+                    return AES_CBC_128_ALG_ID;
                 else if(primitiveName == "RSA_2048_ALG")
                     return RSA_2048_ALG_ID;
                 else if(primitiveName == "ECDSA_SHA_256_ALG")
@@ -30,8 +34,12 @@ namespace ara
                     return ara::core::Result<ara::core::String>("SHA_256_ALG");
                 else if(algId == HMAC_SHA_256_ALG_ID)
                     return ara::core::Result<ara::core::String>("HMAC_SHA_256_ALG");
+                else if(algId == HMAC_SHA_512_ALG_ID)
+                    return ara::core::Result<ara::core::String>("HMAC_SHA_512_ALG");
                 else if(algId == AES_ECB_128_ALG_ID)
                     return ara::core::Result<ara::core::String>("AES_ECB_128_ALG_ID");
+                else if(algId == AES_CBC_128_ALG_ID)
+                    return ara::core::Result<ara::core::String>("AES_CBC_128_ALG_ID");
                 else if(algId == RSA_2048_ALG_ID)
                     return ara::core::Result<ara::core::String>("RSA_2048_ALG");
                 else if(algId == ECDSA_SHA_256_ALG_ID)
@@ -56,7 +64,7 @@ namespace ara
                     return ara::core::Result<HashFunctionCtx::Uptr>(std::make_unique<CryptoPP_SHA_512_HashFunctionCtx>());
                 }
                 else if(algId == RSA_2048_ALG_ID ||
-                    algId == HMAC_SHA_256_ALG_ID ||
+                    algId == HMAC_SHA_256_ALG_ID || algId == HMAC_SHA_512_ALG_ID ||
                     algId == AES_ECB_128_ALG_ID ||
                     algId == ECDSA_SHA_256_ALG_ID
                  )
@@ -81,8 +89,8 @@ namespace ara
                     return ara::core::Result<MessageAuthnCodeCtx::Uptr>(std::make_unique<CryptoPP_HMAC_SHA_512_MessageAuthnCodeCtx>());
                 }
                 else if(algId == RSA_2048_ALG_ID ||
-                    algId == SHA_256_ALG_ID ||
-                    algId == AES_ECB_128_ALG_ID ||
+                    algId == SHA_256_ALG_ID || algId == SHA_512_ALG_ID ||
+                    algId == AES_ECB_128_ALG_ID || algId == AES_CBC_128_ALG_ID ||
                     algId == ECDSA_SHA_256_ALG_ID
                  )
                 {
@@ -102,9 +110,9 @@ namespace ara
                     return ara::core::Result<SymmetricBlockCipherCtx::Uptr>(std::make_unique<CryptoPP_AES_ECD_128_SymmetricBlockCipherCtx>());
                 }
                 else if(algId == RSA_2048_ALG_ID ||
-                    algId == SHA_256_ALG_ID ||
-                    algId == HMAC_SHA_256_ALG_ID ||
-                    algId == ECDSA_SHA_256_ALG_ID
+                    algId == SHA_256_ALG_ID || algId == SHA_512_ALG_ID ||
+                    algId == HMAC_SHA_256_ALG_ID || algId == HMAC_SHA_512_ALG_ID ||
+                    algId == ECDSA_SHA_256_ALG_ID || algId == AES_CBC_128_ALG_ID
                  )
                 {
                     return ara::core::Result<SymmetricBlockCipherCtx::Uptr>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kInvalidArgument, NoSupplementaryDataForErrorDescription));
@@ -112,6 +120,26 @@ namespace ara
                 else
                 {
                     return ara::core::Result<SymmetricBlockCipherCtx::Uptr>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kUnknownIdentifier,NoSupplementaryDataForErrorDescription));
+                }
+            }
+
+            ara::core::Result<StreamCipherCtx::Uptr> CryptoPP_CryptoProvider::CreateStreamCipherCtx (AlgId algId) noexcept 
+            {
+                if(algId == AES_CBC_128_ALG_ID)
+                {
+                    return ara::core::Result<StreamCipherCtx::Uptr>(std::make_unique<CryptoPP_AES_CBC_128_StreamCipherCtx>());
+                }
+                else if(algId == RSA_2048_ALG_ID ||
+                    algId == SHA_256_ALG_ID || algId == SHA_512_ALG_ID ||
+                    algId == HMAC_SHA_256_ALG_ID || algId == HMAC_SHA_512_ALG_ID ||
+                    algId == ECDSA_SHA_256_ALG_ID || algId == AES_ECB_128_ALG_ID
+                 )
+                {
+                    return ara::core::Result<StreamCipherCtx::Uptr>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kInvalidArgument, NoSupplementaryDataForErrorDescription));
+                }
+                else
+                {
+                    return ara::core::Result<StreamCipherCtx::Uptr>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kUnknownIdentifier,NoSupplementaryDataForErrorDescription));
                 }
             }
 
@@ -123,9 +151,9 @@ namespace ara
                     return ara::core::Result<EncryptorPublicCtx::Uptr>(std::make_unique<CryptoPP_RSA_EncryptorPublicCtx>());
                 }
                 else if(algId == AES_ECB_128_ALG_ID ||
-                    algId == SHA_256_ALG_ID ||
-                    algId == HMAC_SHA_256_ALG_ID ||
-                    algId == ECDSA_SHA_256_ALG_ID
+                    algId == SHA_256_ALG_ID || algId == SHA_512_ALG_ID ||
+                    algId == HMAC_SHA_256_ALG_ID || algId == HMAC_SHA_512_ALG_ID ||
+                    algId == ECDSA_SHA_256_ALG_ID || algId == AES_CBC_128_ALG_ID
                  )
                 {
                     return ara::core::Result<EncryptorPublicCtx::Uptr>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kInvalidArgument, NoSupplementaryDataForErrorDescription));
@@ -144,9 +172,9 @@ namespace ara
                     return ara::core::Result<DecryptorPrivateCtx::Uptr>(std::make_unique<CryptoPP_RSA_DecryptorPrivateCtx>());
                 }
                 else if(algId == AES_ECB_128_ALG_ID ||
-                    algId == SHA_256_ALG_ID ||
-                    algId == HMAC_SHA_256_ALG_ID ||
-                    algId == ECDSA_SHA_256_ALG_ID
+                    algId == SHA_256_ALG_ID || algId == SHA_512_ALG_ID ||
+                    algId == HMAC_SHA_256_ALG_ID || algId == HMAC_SHA_512_ALG_ID ||
+                    algId == ECDSA_SHA_256_ALG_ID || algId == AES_CBC_128_ALG_ID
                  )
                 {
                     return ara::core::Result<DecryptorPrivateCtx::Uptr>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kInvalidArgument, NoSupplementaryDataForErrorDescription));
@@ -164,9 +192,9 @@ namespace ara
                     return ara::core::Result<MsgRecoveryPublicCtx::Uptr>(std::make_unique<CryptoPP_ECDSA_SHA_256_MsgRecoveryPublicCtx>());
                 }
                 else if(algId == AES_ECB_128_ALG_ID ||
-                    algId == SHA_256_ALG_ID ||
-                    algId == HMAC_SHA_256_ALG_ID ||
-                    algId == RSA_2048_ALG_ID
+                    algId == SHA_256_ALG_ID || algId == SHA_512_ALG_ID ||
+                    algId == HMAC_SHA_256_ALG_ID || algId == HMAC_SHA_512_ALG_ID ||
+                    algId == RSA_2048_ALG_ID || algId == AES_CBC_128_ALG_ID
                  )
                 {
                     return ara::core::Result<MsgRecoveryPublicCtx::Uptr>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kInvalidArgument, NoSupplementaryDataForErrorDescription));
@@ -184,9 +212,9 @@ namespace ara
                     return ara::core::Result<SigEncodePrivateCtx::Uptr>(std::make_unique<CryptoPP_ECDSA_SHA_256_SigEncodePrivateCtx>());
                 }
                 else if(algId == AES_ECB_128_ALG_ID ||
-                    algId == SHA_256_ALG_ID ||
-                    algId == HMAC_SHA_256_ALG_ID ||
-                    algId == RSA_2048_ALG_ID
+                    algId == SHA_256_ALG_ID || algId == SHA_512_ALG_ID ||
+                    algId == HMAC_SHA_256_ALG_ID || algId == HMAC_SHA_512_ALG_ID ||
+                    algId == RSA_2048_ALG_ID || algId == AES_CBC_128_ALG_ID
                  )
                 {
                     return ara::core::Result<SigEncodePrivateCtx::Uptr>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kInvalidArgument, NoSupplementaryDataForErrorDescription));
@@ -249,9 +277,9 @@ namespace ara
                       return ara::core::Result<PrivateKey::Uptrc>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kIncompatibleArguments, NoSupplementaryDataForErrorDescription));
                     }
                 }
-                else if(algId == AES_ECB_128_ALG_ID ||
-                    algId == SHA_256_ALG_ID ||
-                    algId == HMAC_SHA_256_ALG_ID
+                else if(algId == AES_ECB_128_ALG_ID || algId == AES_CBC_128_ALG_ID ||
+                    algId == SHA_256_ALG_ID || algId == SHA_512_ALG_ID ||
+                    algId == HMAC_SHA_256_ALG_ID || algId == HMAC_SHA_512_ALG_ID
                  )
                 {
                     return ara::core::Result<PrivateKey::Uptrc>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kInvalidArgument, NoSupplementaryDataForErrorDescription));
@@ -269,7 +297,7 @@ namespace ara
 																		  bool isExportable
 																		) noexcept
             {
-                if(algId == AES_ECB_128_ALG_ID)
+                if(algId == AES_ECB_128_ALG_ID || algId == AES_CBC_128_ALG_ID)
                 {
                     if(allowedUsage == kAllowKdfMaterialAnyUsage)
                     {
@@ -337,7 +365,7 @@ namespace ara
                     }
                 }
                 else if(algId == RSA_2048_ALG_ID ||
-                    algId == SHA_256_ALG_ID ||
+                    algId == SHA_256_ALG_ID || algId == SHA_512_ALG_ID ||
                     algId == ECDSA_SHA_256_ALG_ID
                  )
                 {

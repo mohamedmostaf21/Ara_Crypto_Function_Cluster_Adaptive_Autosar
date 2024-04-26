@@ -1,6 +1,6 @@
 #include <iostream>
 #include "../ara/crypto/public/cryp/cryobj/cryptopp_aes_128_symmetric_key.h"
-#include "../ara/crypto/public/cryp/cryptopp_aes_ecb_128_symmetric_block_cipher_ctx.h"
+#include "../ara/crypto/public/cryp/cryptopp_aes_cbc_128_stream_cipher_ctx.h"
 #include "../ara/crypto/helper/print.h"
 #include "../ara/crypto/private/common/entry_point.h"
 #include "../ara/core/instance_specifier.h"
@@ -26,7 +26,7 @@ int main()
         return 0;
     }
 
-    auto aes_contextCreate = myProvider->CreateSymmetricBlockCipherCtx(AES_ECB_128_ALG_ID);
+    auto aes_contextCreate = myProvider->CreateStreamCipherCtx(AES_CBC_128_ALG_ID);
 
     if(!aes_contextCreate.HasValue())
     {
@@ -34,7 +34,7 @@ int main()
         return 0;
     }
 
-    auto myKeyResult = myProvider->GenerateSymmetricKey(AES_ECB_128_ALG_ID,kAllowKdfMaterialAnyUsage);
+    auto myKeyResult = myProvider->GenerateSymmetricKey(AES_CBC_128_ALG_ID,kAllowKdfMaterialAnyUsage);
 
     if(!myKeyResult.HasValue())
     {
@@ -47,12 +47,20 @@ int main()
     auto aes_context = std::move(aes_contextCreate).Value();
     
     aes_context->SetKey(*myKey);
+
+    CryptoPP::AutoSeededRandomPool prng;
+
+    CryptoPP::byte iv[12];
+
+    prng.GenerateBlock(iv, sizeof(iv));
+
+    aes_context->Start(iv);
     
     std::string str = "Hello There";
     ara::crypto::ReadOnlyMemRegion instr(reinterpret_cast<const std::uint8_t*>(str.data()), str.size());
 
 
-    auto _result_encrypt = aes_context->ProcessBlock(instr);
+    auto _result_encrypt = aes_context->ProcessBlocks(instr);
     if(_result_encrypt.HasValue())
     {
         std::cout<<"success\n";
@@ -63,7 +71,7 @@ int main()
 
         aes_context->SetKey(*myKey, ara::crypto::CryptoTransform::kDecrypt);
 
-        auto _result_decrypt = aes_context->ProcessBlock(encryptedData);
+        auto _result_decrypt = aes_context->ProcessBlocks(encryptedData);
 
         if(_result_decrypt.HasValue())
         {

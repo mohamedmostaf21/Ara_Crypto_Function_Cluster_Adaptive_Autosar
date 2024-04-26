@@ -9,6 +9,7 @@
 #include "decryptor_private_ctx.h"
 #include "msg_recovery_public_ctx.h"
 #include "sig_encode_private_ctx.h"
+#include "stream_cipher_ctx.h"
 
 namespace ara
 {
@@ -40,6 +41,8 @@ namespace ara
                 virtual ara::core::Result<MsgRecoveryPublicCtx::Uptr> CreateMsgRecoveryPublicCtx (AlgId algId) noexcept=0;
 
                 virtual ara::core::Result<SigEncodePrivateCtx::Uptr> CreateSigEncodePrivateCtx (AlgId algId) noexcept=0;
+
+                virtual ara::core::Result<StreamCipherCtx::Uptr> CreateStreamCipherCtx (AlgId algId) noexcept=0;
 
              
                 virtual ara::core::Result<PrivateKey::Uptrc> GeneratePrivateKey ( AlgId algId, 
