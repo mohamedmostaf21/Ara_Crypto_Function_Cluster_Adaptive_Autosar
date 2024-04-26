@@ -125,11 +125,8 @@ namespace ara
 
             ara::core::Result<StreamCipherCtx::Uptr> CryptoPP_CryptoProvider::CreateStreamCipherCtx (AlgId algId) noexcept 
             {
-                if(algId == AES_CBC_128_ALG_ID)
-                {
-                    return ara::core::Result<StreamCipherCtx::Uptr>(std::make_unique<CryptoPP_AES_CBC_128_StreamCipherCtx>());
-                }
-                else if(algId == RSA_2048_ALG_ID ||
+               
+                if(algId == RSA_2048_ALG_ID ||
                     algId == SHA_256_ALG_ID || algId == SHA_512_ALG_ID ||
                     algId == HMAC_SHA_256_ALG_ID || algId == HMAC_SHA_512_ALG_ID ||
                     algId == ECDSA_SHA_256_ALG_ID || algId == AES_ECB_128_ALG_ID
