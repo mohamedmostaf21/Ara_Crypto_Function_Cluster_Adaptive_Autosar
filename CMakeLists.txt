@@ -243,7 +243,3 @@ target_link_libraries(demo_hash_512 ${Crypto++_LIBRARIES})
 add_executable(demo_ecdsa Demos/demo_ecdsa.cpp)
 target_link_libraries(demo_ecdsa Crypto)
 target_link_libraries(demo_ecdsa ${Crypto++_LIBRARIES})
-
-add_executable(demo_aes_cbc Demos/demo_aes_cbc.cpp)
-target_link_libraries(demo_aes_cbc Crypto)
-target_link_libraries(demo_aes_cbc ${Crypto++_LIBRARIES})
