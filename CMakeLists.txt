@@ -122,7 +122,11 @@ add_library(
    ara/crypto/public/cryp/cryptopp_ecdsa_sha_256_msg_recovery_public_ctx.h
    ara/crypto/public/cryp/cryptopp_ecdsa_sha_256_msg_recovery_public_ctx.cpp
 
+   ara/crypto/public/cryp/cryptopp_aes_cbc_128_symmetric_block_cipher_ctx.h
+   ara/crypto/public/cryp/cryptopp_aes_cbc_128_symmetric_block_cipher_ctx.cpp
 
+   ara/crypto/public/cryp/cryptopp_chacha_stream_cipher_ctx.h
+   ara/crypto/public/cryp/cryptopp_chacha_stream_cipher_ctx.cpp
 
    ara/crypto/public/cryp/cryptopp_crypto_provider.h
    ara/crypto/public/cryp/cryptopp_crypto_provider.cpp
@@ -243,3 +247,12 @@ target_link_libraries(demo_hash_512 ${Crypto++_LIBRARIES})
 add_executable(demo_ecdsa Demos/demo_ecdsa.cpp)
 target_link_libraries(demo_ecdsa Crypto)
 target_link_libraries(demo_ecdsa ${Crypto++_LIBRARIES})
+
+add_executable(demo_aes_cbc Demos/demo_aes_cbc.cpp)
+target_link_libraries(demo_aes_cbc Crypto)
+target_link_libraries(demo_aes_cbc ${Crypto++_LIBRARIES})
+
+
+add_executable(demo_cha_cha Demos/demo_cha_cha.cpp)
+target_link_libraries(demo_cha_cha Crypto)
+target_link_libraries(demo_cha_cha ${Crypto++_LIBRARIES})

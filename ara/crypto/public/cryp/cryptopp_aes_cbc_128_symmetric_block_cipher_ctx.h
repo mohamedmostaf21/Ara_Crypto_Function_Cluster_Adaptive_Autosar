@@ -1,9 +1,11 @@
-#ifndef CRYPTOPP_AES_ECB_128_SYMMETRIC_BLOCK_CIPHER_CTX_h
-#define CRYPTOPP_AES_ECB_128_SYMMETRIC_BLOCK_CIPHER_CTX_h
+#ifndef CRYPTOPP_AES_CBC_128_H
+#define CRYPTOPP_AES_CBC_128_H
 
 #include "../../private/cryp/symmetric_block_cipher_ctx.h"
 #include "cryobj/cryptopp_crypto_primitive_id.h"
 #include "cryobj/cryptopp_aes_128_symmetric_key.h"
+#include "cryptopp/chacha.h"
+#include "cryptopp/osrng.h"
 #include "../../helper/state.h"
 
 namespace ara
@@ -12,12 +14,12 @@ namespace ara
     {
         namespace cryp
         {
-            class CryptoPP_AES_ECB_128_SymmetricBlockCipherCtx : public SymmetricBlockCipherCtx 
+            class CryptoPP_AES_CBC_128_SymmetricBlockCipherCtx : public SymmetricBlockCipherCtx
             {
             public :
                 /******************* constants **********************/
                 static const std::string mAlgName;
-                const CryptoPrimitiveId::AlgId mAlgId = 2;
+                const CryptoPrimitiveId::AlgId mAlgId = 1;
 
 
             private:
@@ -25,16 +27,18 @@ namespace ara
                 CryptoPP_AES_128_SymmetricKey *mKey;
                 CryptoTransform  mTransform;
                 CryptoPP_CryptoPrimitiveId mPId;
-                helper::setKeyState mSetKeyState;          
-                CryptoPP::SecByteBlock recoveredtext();
+                helper::setKeyState mSetKeyState;         
+                CryptoPP::byte iv[8];
 
                 
             public:
                 //using Uptr = std::unique_ptr<CryptoPP_AES_SymmetricBlockCipherCtx>;
 
                 /***************** constructor **********************/     
-                CryptoPP_AES_ECB_128_SymmetricBlockCipherCtx();
+                CryptoPP_AES_CBC_128_SymmetricBlockCipherCtx();
 
+
+                
 
                 
                 /****** override pure virtual functions related to CryptoContext *****/
@@ -46,7 +50,6 @@ namespace ara
                     It checks all required values, including: key value, IV/seed, etc
                 */
                 bool IsInitialized () const noexcept override;
-      
 
 
                 /***** override pure virtual functions inherited related SymmetricBlockCipherCtx *****/
@@ -55,15 +58,17 @@ namespace ara
                                                         CryptoTransform transform=CryptoTransform::kEncrypt
                                                       ) noexcept override;
                 
-                //  takes the data that we want to process (preform an operation on it)                
-                ara::core::Result<ara::core::Vector<ara::core::Byte> > ProcessBlocks ( ReadOnlyMemRegion in
+                //  takes the data that we want to process (preform an operation on it)
+                ara::core::Result<ara::core::Vector<ara::core::Byte> > ProcessBlocks( ReadOnlyMemRegion in
                                                                                             ) const noexcept override;
+
+
 
                 /*
                     Get the kind of transformation configured for this context: kEncrypt or kDecrypt
                     returns CryptoErrorDomain::kUninitialized Context,if SetKey() has not been called yet
                 */
-                ara::core::Result<CryptoTransform> GetTransformation () const noexcept override;
+                virtual ara::core::Result<CryptoTransform> GetTransformation () const noexcept override;
                 
                 
                 

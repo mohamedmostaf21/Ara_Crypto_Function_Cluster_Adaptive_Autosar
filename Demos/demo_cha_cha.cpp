@@ -1,6 +1,6 @@
 #include <iostream>
 #include "../ara/crypto/public/cryp/cryobj/cryptopp_aes_128_symmetric_key.h"
-#include "../ara/crypto/public/cryp/cryptopp_aes_ecb_128_symmetric_block_cipher_ctx.h"
+#include "../ara/crypto/public/cryp/cryptopp_chacha_stream_cipher_ctx.h"
 #include "../ara/crypto/helper/print.h"
 #include "../ara/crypto/private/common/entry_point.h"
 #include "../ara/core/instance_specifier.h"
@@ -26,15 +26,15 @@ int main()
         return 0;
     }
 
-    auto aes_contextCreate = myProvider->CreateSymmetricBlockCipherCtx(AES_ECB_128_ALG_ID);
+    auto chacha_ctxCreate = myProvider->CreateStreamCipherCtx(CHA_CHA_ALG_ID);
 
-    if(!aes_contextCreate.HasValue())
+    if(!chacha_ctxCreate.HasValue())
     {
-        std::cout << "Failed to Create AES Context\n";
+        std::cout << "Failed to Create CHA CHA Context\n";
         return 0;
     }
 
-    auto myKeyResult = myProvider->GenerateSymmetricKey(AES_ECB_128_ALG_ID,kAllowKdfMaterialAnyUsage);
+    auto myKeyResult = myProvider->GenerateSymmetricKey(CHA_CHA_ALG_ID,kAllowKdfMaterialAnyUsage);
 
     if(!myKeyResult.HasValue())
     {
@@ -44,15 +44,31 @@ int main()
 
     auto myKey = std::move(myKeyResult).Value();
     
-    auto aes_context = std::move(aes_contextCreate).Value();
+    auto chacha_ctx = std::move(chacha_ctxCreate).Value();
     
-    aes_context->SetKey(*myKey);
+    chacha_ctx->SetKey(*myKey);
+
+    chacha_ctx->Start();
+
+
     
-    std::string str = "Hello There";
+    std::string str = "Hello";
     ara::crypto::ReadOnlyMemRegion instr(reinterpret_cast<const std::uint8_t*>(str.data()), str.size());
 
+    
 
-    auto _result_encrypt = aes_context->ProcessBlocks(instr);
+    auto _result_encrypt = chacha_ctx->ProcessBytes(instr);
+
+    str = " There";
+    ara::crypto::ReadOnlyMemRegion instr1(reinterpret_cast<const std::uint8_t*>(str.data()), str.size());
+
+    _result_encrypt = chacha_ctx->ProcessBytes(instr1);
+
+    str = " World!!";
+    ara::crypto::ReadOnlyMemRegion instr2(reinterpret_cast<const std::uint8_t*>(str.data()), str.size());
+
+    _result_encrypt = chacha_ctx->FinishBytes(instr2);
+
     if(_result_encrypt.HasValue())
     {
         std::cout<<"success\n";
@@ -61,9 +77,9 @@ int main()
 
         printHex(encryptedData);
 
-        aes_context->SetKey(*myKey, ara::crypto::CryptoTransform::kDecrypt);
+        chacha_ctx->SetKey(*myKey, ara::crypto::CryptoTransform::kDecrypt);
 
-        auto _result_decrypt = aes_context->ProcessBlocks(encryptedData);
+        auto _result_decrypt = chacha_ctx->ProcessBlocks(encryptedData);
 
         if(_result_decrypt.HasValue())
         {

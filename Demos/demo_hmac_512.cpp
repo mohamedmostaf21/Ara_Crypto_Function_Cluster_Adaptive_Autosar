@@ -100,4 +100,21 @@ int main()
         ara::core::ErrorCode error = _result_Finish.Error();
         std::cout << error.Message() << std::endl;
     }
+
+    CryptoPP_HMAC_SHA512_Signature sign;
+
+    CryptoPP::SecByteBlock digest(hmac512->GetDigest().Value().data(), hmac512->GetDigest().Value().size());
+
+
+
+    sign.setValue(digest);
+
+    if(hmac512->Check(sign).Value() == true)
+    {
+        std::cout<<"Verified\n";
+    }
+    else
+    {
+        std::cout<<"Not Verifiedr\n";
+    }
 }

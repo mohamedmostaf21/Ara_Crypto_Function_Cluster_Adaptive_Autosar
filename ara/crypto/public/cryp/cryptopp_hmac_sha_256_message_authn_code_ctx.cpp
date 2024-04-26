@@ -177,7 +177,24 @@ namespace ara
 
             ara::core::Result<bool> CryptoPP_HMAC_SHA_256_MessageAuthnCodeCtx::Check (const Signature &expected) const noexcept
             {
-                return ara::core::Result<bool>::FromValue(true);
+                try
+                {
+                    const CryptoPP_HMAC_SHA256_Signature& sign = dynamic_cast<const CryptoPP_HMAC_SHA256_Signature&>(expected);
+
+                    if(this->digest == sign.GetDigestValue())
+                    {
+                        return ara::core::Result<bool>::FromValue(true);
+                    }
+                    else
+                    {
+                        return ara::core::Result<bool>::FromValue(false);
+                    }
+                }
+                catch (const std::bad_cast& e) // return error
+                {
+                    // Failed to cast SymmetricKey to CryptoPP_AES_SymmetricKey
+                    return ara::core::Result<bool>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kIncompatibleObject, NoSupplementaryDataForErrorDescription));
+                }
             }
 
             //ara::core::Result<void> CryptoPP_HMAC_SHA_256_MessageAuthnCodeCtx::Reset () noexcept=0;        

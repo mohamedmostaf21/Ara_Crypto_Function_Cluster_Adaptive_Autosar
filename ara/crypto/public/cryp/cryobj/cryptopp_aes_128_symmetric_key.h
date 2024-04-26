@@ -38,18 +38,18 @@ namespace ara
                    mValue = ((CryptoPP_AES_128_SymmetricKey)obj).mValue;
                 }
                 
-                /*************************************************************
-                 * not autosar but until key storage provider is implemented
-                **************************************************************/
-                static std::unique_ptr<SymmetricKey> createInstance() 
-                {
-                    std::unique_ptr<CryptoPP_AES_128_SymmetricKey> ptr = std::make_unique<CryptoPP_AES_128_SymmetricKey>();
+                // /*************************************************************
+                //  * not autosar but until key storage provider is implemented
+                // **************************************************************/
+                // static std::unique_ptr<SymmetricKey> createInstance() 
+                // {
+                //     std::unique_ptr<CryptoPP_AES_128_SymmetricKey> ptr = std::make_unique<CryptoPP_AES_128_SymmetricKey>();
                     
-                    std::string key = "0123456789abcdef";
-                    ptr->mValue.Assign((const CryptoPP::byte*)key.data(), CryptoPP::AES::DEFAULT_KEYLENGTH);
+                //     std::string key = "0123456789abcdef";
+                //     ptr->mValue.Assign((const CryptoPP::byte*)key.data(), CryptoPP::AES::DEFAULT_KEYLENGTH);
                          
-                    return std::move(ptr);                    
-                }
+                //     return std::move(ptr);                    
+                // }
 
                 /************ getter and setter ***********/
                 CryptoPP::SecByteBlock getValue()

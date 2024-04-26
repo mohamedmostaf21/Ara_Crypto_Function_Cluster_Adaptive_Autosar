@@ -29,7 +29,7 @@ int main()
 
     if(!hash512Create.HasValue())
     {
-        std::cout << "Failed to Create HMAC 256 Context\n";
+        std::cout << "Failed to Create HASH 512 Context\n";
         return 0;
     }
 

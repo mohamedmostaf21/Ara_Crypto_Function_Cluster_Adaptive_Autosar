@@ -20,17 +20,14 @@ namespace ara
                 
 
                 /**************** pure virtual fuctions *****************/
-                //virtual DigestService::Uptr GetDigestService () const noexcept=0;
                  
                 virtual ara::core::Result<void> Start () noexcept=0;
                       
                 virtual ara::core::Result<void> Start (ReadOnlyMemRegion iv) noexcept=0;
 
-                //virtual ara::core::Result<void> Start (const SecretSeed &iv) noexcept=0;
 
                 virtual ara::core::Result<void> Update (ReadOnlyMemRegion in) noexcept=0;
 
-                //virtual ara::core::Result<void> Update (const RestrictedUseObject &in) noexcept=0;
 
                 virtual ara::core::Result<void> Update (std::uint8_t in) noexcept=0;
                       

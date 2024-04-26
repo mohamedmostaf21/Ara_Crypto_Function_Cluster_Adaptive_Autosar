@@ -67,11 +67,7 @@ namespace ara
                 
                 ara::core::Result<ara::core::Vector<ara::core::Byte> > GetDigest(std::size_t offset=0) noexcept override;
             
-                //virtual DigestService::Uptr GetDigestService () const noexcept;
 
-                //virtual ara::core::Result<void> Start (const SecretSeed &iv) noexcept;
-                
-                // ara::core::Result<void> Update (const RestrictedUseObject &in) noexcept;
             };
         }
     }

@@ -4,6 +4,7 @@
 #include "../../private/cryp/message_authn_code_ctx.h"
 #include "cryobj/cryptopp_crypto_primitive_id.h"
 #include "cryobj/cryptopp_hmac_sha_512_symmetric_key.h"
+#include "cryobj/cryptopp_hmac_sha_512_signature.h"
 #include "../../helper/state.h"
 
 namespace ara

@@ -107,7 +107,11 @@ namespace ara
             {
                 if(algId == AES_ECB_128_ALG_ID)
                 {
-                    return ara::core::Result<SymmetricBlockCipherCtx::Uptr>(std::make_unique<CryptoPP_AES_ECD_128_SymmetricBlockCipherCtx>());
+                    return ara::core::Result<SymmetricBlockCipherCtx::Uptr>(std::make_unique<CryptoPP_AES_ECB_128_SymmetricBlockCipherCtx>());
+                }
+                else if(algId == AES_CBC_128_ALG_ID)
+                {
+                    return ara::core::Result<SymmetricBlockCipherCtx::Uptr>(std::make_unique<CryptoPP_AES_CBC_128_SymmetricBlockCipherCtx>());
                 }
                 else if(algId == RSA_2048_ALG_ID ||
                     algId == SHA_256_ALG_ID || algId == SHA_512_ALG_ID ||
@@ -125,11 +129,15 @@ namespace ara
 
             ara::core::Result<StreamCipherCtx::Uptr> CryptoPP_CryptoProvider::CreateStreamCipherCtx (AlgId algId) noexcept 
             {
-               
-                if(algId == RSA_2048_ALG_ID ||
+                if (algId == CHA_CHA_ALG_ID)
+                {
+                     return ara::core::Result<StreamCipherCtx::Uptr>(std::make_unique<CryptoPP_CHACHA_StreamCipherCtx>());
+                }
+                
+                else if(algId == RSA_2048_ALG_ID ||
                     algId == SHA_256_ALG_ID || algId == SHA_512_ALG_ID ||
                     algId == HMAC_SHA_256_ALG_ID || algId == HMAC_SHA_512_ALG_ID ||
-                    algId == ECDSA_SHA_256_ALG_ID || algId == AES_ECB_128_ALG_ID
+                    algId == ECDSA_SHA_256_ALG_ID || algId == AES_ECB_128_ALG_ID || AES_CBC_128_ALG_ID
                  )
                 {
                     return ara::core::Result<StreamCipherCtx::Uptr>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kInvalidArgument, NoSupplementaryDataForErrorDescription));
@@ -318,6 +326,28 @@ namespace ara
                     else
                     {
                       return ara::core::Result<SymmetricKey::Uptrc>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kIncompatibleArguments, NoSupplementaryDataForErrorDescription));
+                    }
+                }
+                else if(algId == CHA_CHA_ALG_ID)
+                {
+                    if(allowedUsage == kAllowKdfMaterialAnyUsage)
+                    {
+                        CryptoPP::AutoSeededRandomPool rng; 
+                        CryptoPP::SecByteBlock mySymmetricKey(CryptoPP::ChaCha::DEFAULT_KEYLENGTH);
+                        rng.GenerateBlock(mySymmetricKey, mySymmetricKey.size());
+
+                        std::cout << "Random key: ";
+                        for (size_t i = 0; i < mySymmetricKey.size(); i++) {
+                            printf("%02x", mySymmetricKey[i]);
+                        }
+                        std::cout << std::endl;
+
+
+                        std::unique_ptr<CryptoPP_SymmetricKey> ptr = std::make_unique<CryptoPP_SymmetricKey>();
+                            
+                        ptr->setValue(mySymmetricKey);
+
+                        return ara::core::Result<SymmetricKey::Uptrc>(std::move(ptr));
                     }
                 }
                 else if(algId == HMAC_SHA_256_ALG_ID || algId == HMAC_SHA_512_ALG_ID)

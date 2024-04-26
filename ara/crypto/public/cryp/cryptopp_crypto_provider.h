@@ -11,7 +11,9 @@
 #include "cryptopp_rsa_2046_decryptor_private_ctx.h"
 #include "cryptopp_ecdsa_sha_256_sig_encode_private_ctx.h"
 #include "cryptopp_ecdsa_sha_256_msg_recovery_public_ctx.h"
-#include "cryptopp_aes_cbc_128_stream_cipher_ctx.h"
+#include "cryptopp_aes_cbc_128_symmetric_block_cipher_ctx.h"
+#include "cryptopp_chacha_stream_cipher_ctx.h"
+
 
 #define SHA_256_ALG_ID       1
 #define SHA_512_ALG_ID       5
@@ -21,6 +23,7 @@
 #define RSA_2048_ALG_ID      4
 #define ECDSA_SHA_256_ALG_ID 2
 #define AES_CBC_128_ALG_ID   7
+#define CHA_CHA_ALG_ID       8
 
 namespace ara
 {

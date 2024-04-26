@@ -49,13 +49,13 @@ namespace ara
                  (ReadOnlyMemRegion in) noexcept=0;
 
 
-                //  takes the data that we want to process (preform an operation on it)
-                // virtual ara::core::Result<ara::core::Vector<ara::core::Byte> > ProcessBytes
-                //  (ReadOnlyMemRegion in) noexcept=0;
+                 //takes the data that we want to process (preform an operation on it)
+                virtual ara::core::Result<ara::core::Vector<ara::core::Byte> > ProcessBytes
+                 (ReadOnlyMemRegion in) noexcept=0;
 
 
-                // virtual ara::core::Result<ara::core::Vector<ara::core::Byte> > FinishBytes
-                //  (ReadOnlyMemRegion in) noexcept=0;
+                virtual ara::core::Result<ara::core::Vector<ara::core::Byte> > FinishBytes
+                 (ReadOnlyMemRegion in) noexcept=0;
 
                 
                 

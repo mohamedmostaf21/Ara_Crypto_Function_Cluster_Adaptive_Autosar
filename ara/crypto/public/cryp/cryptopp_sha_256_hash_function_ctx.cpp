@@ -24,7 +24,7 @@ namespace ara
             
             bool CryptoPP_SHA_256_HashFunctionCtx::IsInitialized () const noexcept
             {
-                return true;
+                return (!(seq == helper::calling::START_IS_NOT_CALLED));
             }
 
             

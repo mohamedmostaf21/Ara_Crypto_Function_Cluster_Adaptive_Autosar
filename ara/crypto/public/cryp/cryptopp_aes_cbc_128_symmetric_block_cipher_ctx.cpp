@@ -1,5 +1,8 @@
-#include "cryptopp_aes_symmetric_block_cipher_ctx.h"
+#include "cryptopp_aes_cbc_128_symmetric_block_cipher_ctx.h"
+#include "cryptopp/chachapoly.h"
 #include "../../private/common/crypto_error_domain.h"
+#include "cryptopp/osrng.h"
+#include "cryptopp/rijndael.h"
 
 
 namespace ara
@@ -8,26 +11,26 @@ namespace ara
     {
         namespace cryp
         {
-            extern CryptoErrorDomain _obj;
+            const std::string CryptoPP_AES_CBC_128_SymmetricBlockCipherCtx::mAlgName("AES_CBC_128_Stream_Cipher");
 
-            const std::string CryptoPP_AES_SymmetricBlockCipherCtx::mAlgName("aes_ecb");
 
-            /***************** constructor **********************/
-            
-            CryptoPP_AES_SymmetricBlockCipherCtx::CryptoPP_AES_SymmetricBlockCipherCtx(): mKey(nullptr),
+
+
+            /***************** constructor **********************/         
+            CryptoPP_AES_CBC_128_SymmetricBlockCipherCtx::CryptoPP_AES_CBC_128_SymmetricBlockCipherCtx(): mKey(nullptr),
                                                     mTransform(CryptoTransform::kEncrypt),
                                                     mPId(mAlgId,mAlgName),
-                                                    mSetKeyState(setKeyState::NOT_CALLED)
+                                                    mSetKeyState(helper::setKeyState::NOT_CALLED)
             {}
+
 
 
 
             /****** override pure virtual functions related to CryptoContext *****/
 
-            /*
-                Return CryptoPrimitivId instance containing instance identification
-            */
-            CryptoPrimitiveId::Uptr CryptoPP_AES_SymmetricBlockCipherCtx::GetCryptoPrimitiveId () const noexcept
+            
+            // Return CryptoPrimitivId instance containing instance identification
+            CryptoPrimitiveId::Uptr CryptoPP_AES_CBC_128_SymmetricBlockCipherCtx::GetCryptoPrimitiveId () const noexcept
             {                    
                 return std::make_unique<CryptoPP_CryptoPrimitiveId>(mPId);
             }
@@ -36,9 +39,9 @@ namespace ara
                     Check if the crypto context is already initialized and ready to use. 
                     It checks all required values, including: key value, IV/seed, etc
             */
-            bool CryptoPP_AES_SymmetricBlockCipherCtx::IsInitialized () const noexcept
+            bool CryptoPP_AES_CBC_128_SymmetricBlockCipherCtx::IsInitialized () const noexcept
             {
-                return (mSetKeyState == setKeyState::CALLED && mKey != nullptr);
+                return (mSetKeyState == helper::setKeyState::CALLED && mKey != nullptr);
             }
             
 
@@ -48,52 +51,61 @@ namespace ara
             /*
                 takes key and type of processing we want (type of operation ex:Encryption or decryption)
             */
-            ara::core::Result<void> CryptoPP_AES_SymmetricBlockCipherCtx::SetKey( const SymmetricKey &key,
+            ara::core::Result<void> CryptoPP_AES_CBC_128_SymmetricBlockCipherCtx::SetKey( const SymmetricKey &key,
                                                     CryptoTransform transform
                                                     ) noexcept
             {  
-                try
+                if(transform != CryptoTransform::kEncrypt && 
+                    transform != CryptoTransform::kDecrypt) // return error
                 {
-                    const CryptoPP_AES_SymmetricKey& aesKey = dynamic_cast<const CryptoPP_AES_SymmetricKey&>(key);
-                    mKey = new CryptoPP_AES_SymmetricKey(aesKey);
-                    
-                    if(transform != CryptoTransform::kEncrypt && 
-                    transform != CryptoTransform::kDecrypt)
+                    return ara::core::Result<void>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kUsageViolation, NoSupplementaryDataForErrorDescription));
+                }
+
+                try
+                {    
+                    if(mSetKeyState == helper::setKeyState::NOT_CALLED)
                     {
-                        ara::core::ErrorCode x =  ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kUsageViolation,5); 
-                        return ara::core::Result<void>::FromError(x);
+                        const CryptoPP_AES_128_SymmetricKey& Key = dynamic_cast<const CryptoPP_AES_128_SymmetricKey&>(key);
+                        mKey = new CryptoPP_AES_128_SymmetricKey(Key);
+                        
+                        mSetKeyState = helper::setKeyState::CALLED;
+
+                        CryptoPP::AutoSeededRandomPool prng;
+
+                        prng.GenerateBlock(iv, sizeof(iv));
                     }
                     mTransform = transform;
-                    mSetKeyState = setKeyState::CALLED;
-                    
+
                     return ara::core::Result<void>::FromValue();
                 }
-                catch (const std::bad_cast& e) {
-                    std::cerr << "Failed to cast SymmetricKey to CryptoPP_AES_SymmetricKey: " << e.what() << std::endl;
-                    ara::core::ErrorCode x =  ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kIncompatibleObject,5); 
-                    return ara::core::Result<void>::FromError(x);
+                catch (const std::bad_cast& e) // return error
+                {
+                    // Failed to cast SymmetricKey to CryptoPP_AES_SymmetricKey
+                    return ara::core::Result<void>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kIncompatibleObject, NoSupplementaryDataForErrorDescription));
                 }
             }
-                              
+
+
+
             /* 
                 takes the data that we want to process (preform an operation on it)
                 returns CryptoErrorDomain::kUninitializedContext,if SetKey() has not been called yet
             */                
-            ara::core::Result<ara::core::Vector<ara::core::Byte>> CryptoPP_AES_SymmetricBlockCipherCtx::ProcessBlocks ( ReadOnlyMemRegion in
-                                                                                        ) const noexcept
+             ara::core::Result<ara::core::Vector<ara::core::Byte>> CryptoPP_AES_CBC_128_SymmetricBlockCipherCtx::ProcessBlocks( ReadOnlyMemRegion in
+                                                                                            ) const noexcept
             {
-                if(mSetKeyState == setKeyState::NOT_CALLED)
+                if(mSetKeyState == helper::setKeyState::NOT_CALLED) // return error
                 {   
-                    ara::core::ErrorCode x =  ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kUninitializedContext,5); 
-                    return ara::core::Result<ara::core::Vector<ara::core::Byte>>::FromError(x);
+                    return ara::core::Result<ara::core::Vector<ara::core::Byte>>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kProcessingNotStarted, NoSupplementaryDataForErrorDescription));
                 }
-
-                try 
+                else if(!in.size())
                 {
-                    if(mTransform == CryptoTransform::kEncrypt)
+                    return ara::core::Result<ara::core::Vector<ara::core::Byte>>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kInvalidInputSize, NoSupplementaryDataForErrorDescription));
+                }
+                if(mTransform == CryptoTransform::kEncrypt)
                     {
-                        CryptoPP::ECB_Mode<CryptoPP::AES>::Encryption encryptor;
-                        encryptor.SetKey(mKey->getKey(), mKey->getKey().size());
+                        CryptoPP::CBC_Mode<CryptoPP::AES>::Encryption encryptor;
+                        encryptor.SetKeyWithIV(mKey->getValue(), mKey->getValue().size(), iv);
                         //std::cout << "Key: " << bytes_to_hex(mKey->getKey(), mKey->getKey().size()) << std::endl;
                 
                         std::string plain(in.begin(), in.end());
@@ -107,14 +119,14 @@ namespace ara
                         ara::core::Vector<ara::core::Byte> encryptedData(cipher.begin(), cipher.end());
                         return ara::core::Result<ara::core::Vector<ara::core::Byte>>(encryptedData);
                     }
-                    else if(mTransform == CryptoTransform::kDecrypt)
+                    else 
                     {
-                        CryptoPP::ECB_Mode<CryptoPP::AES>::Decryption decryptor;
-                        decryptor.SetKey(mKey->getKey(), mKey->getKey().size());
+                        CryptoPP::CBC_Mode<CryptoPP::AES>::Decryption decryptor;
+                        decryptor.SetKeyWithIV(mKey->getValue(), mKey->getValue().size(), iv);
                         //std::cout << "Key: " << bytes_to_hex(mKey->getKey(), mKey->getKey().size()) << std::endl;
                 
                         std::string cipher(in.begin(), in.end());
-                        std::cout << "Input Data: " << cipher << std::endl;
+                        //std::cout << "Input Data Cipher: " << cipher << std::endl;
 
                         std::string plain;
                         CryptoPP::StringSource(cipher, true, new CryptoPP::StreamTransformationFilter(decryptor, new CryptoPP::StringSink(plain)));
@@ -124,32 +136,27 @@ namespace ara
                         ara::core::Vector<ara::core::Byte> decryptedData(plain.begin(), plain.end());
                         return ara::core::Result<ara::core::Vector<ara::core::Byte>>(decryptedData);
                     }
-                    else
-                    {
-                        return ara::core::Result<ara::core::Vector<ara::core::Byte>>(ara::core::Vector<ara::core::Byte>());
-                    }
-                } 
-                catch (const CryptoPP::Exception& e) {
-                    std::cerr << "Crypto++ exception: " << e.what() << std::endl;
-                    return ara::core::Result<ara::core::Vector<ara::core::Byte>>(ara::core::Vector<ara::core::Byte>());
-                }
-            }
+            }                   
+
+
 
             /*
                 Get the kind of transformation configured for this context: kEncrypt or kDecrypt
                 returns CryptoErrorDomain::kUninitializedContext,if SetKey() has not been called yet
             */
-            ara::core::Result<CryptoTransform> CryptoPP_AES_SymmetricBlockCipherCtx::GetTransformation () const noexcept
+            ara::core::Result<CryptoTransform> CryptoPP_AES_CBC_128_SymmetricBlockCipherCtx::GetTransformation () const noexcept
             {
-                if(mSetKeyState == setKeyState::CALLED)
+                if(mSetKeyState == helper::setKeyState::CALLED)
                     return ara::core::Result<CryptoTransform>(mTransform);
-                else
+                else // return error
                 {
-                    ara::core::ErrorCode x =  ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kUninitializedContext,5); 
-                    return ara::core::Result<CryptoTransform>::FromError(x);
+                    return ara::core::Result<CryptoTransform>::FromError(ara::crypto::MakeErrorCode(CryptoErrorDomain::Errc::kUninitializedContext, NoSupplementaryDataForErrorDescription));
                 }
             }
             
+
+
+
             // ara::core::Result<ara::core::Vector<ara::core::Byte> > ProcessBlocks (ReadOnlyMemRegion in) const noexcept=0;
 
             // CryptoService::Uptr GetCryptoService () const noexcept=0;

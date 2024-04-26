@@ -1,6 +1,6 @@
 #include <iostream>
 #include "../ara/crypto/public/cryp/cryobj/cryptopp_aes_128_symmetric_key.h"
-#include "../ara/crypto/public/cryp/cryptopp_aes_ecb_128_symmetric_block_cipher_ctx.h"
+#include "../ara/crypto/public/cryp/cryptopp_aes_cbc_128_symmetric_block_cipher_ctx.h"
 #include "../ara/crypto/helper/print.h"
 #include "../ara/crypto/private/common/entry_point.h"
 #include "../ara/core/instance_specifier.h"
@@ -26,7 +26,7 @@ int main()
         return 0;
     }
 
-    auto aes_contextCreate = myProvider->CreateSymmetricBlockCipherCtx(AES_ECB_128_ALG_ID);
+    auto aes_contextCreate = myProvider->CreateSymmetricBlockCipherCtx(AES_CBC_128_ALG_ID);
 
     if(!aes_contextCreate.HasValue())
     {
@@ -34,7 +34,7 @@ int main()
         return 0;
     }
 
-    auto myKeyResult = myProvider->GenerateSymmetricKey(AES_ECB_128_ALG_ID,kAllowKdfMaterialAnyUsage);
+    auto myKeyResult = myProvider->GenerateSymmetricKey(AES_CBC_128_ALG_ID,kAllowKdfMaterialAnyUsage);
 
     if(!myKeyResult.HasValue())
     {
@@ -47,6 +47,7 @@ int main()
     auto aes_context = std::move(aes_contextCreate).Value();
     
     aes_context->SetKey(*myKey);
+
     
     std::string str = "Hello There";
     ara::crypto::ReadOnlyMemRegion instr(reinterpret_cast<const std::uint8_t*>(str.data()), str.size());

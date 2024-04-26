@@ -84,8 +84,7 @@ namespace ara
                 /* 
                     takes the data that we want to process (preform an operation on it)
                 */                
-                virtual ara::core::Result<ara::core::Vector<ara::core::Byte> > ProcessBlock ( ReadOnlyMemRegion in,
-                                                                                            bool suppressPadding=false
+                virtual ara::core::Result<ara::core::Vector<ara::core::Byte> > ProcessBlocks ( ReadOnlyMemRegion in
                                                                                             ) const noexcept override;
 
                 /*

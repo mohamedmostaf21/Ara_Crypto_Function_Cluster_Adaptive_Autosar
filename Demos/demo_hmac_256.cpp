@@ -1,5 +1,6 @@
 #include <iostream>
 #include "../ara/crypto/public/cryp/cryptopp_hmac_sha_256_message_authn_code_ctx.h"
+#include "../ara/crypto/public/cryp/cryobj/cryptopp_hmac_sha_256_signature.h"
 #include "../ara/crypto/helper/print.h"
 #include "../ara/crypto/private/common/entry_point.h"
 #include "../ara/core/instance_specifier.h"
@@ -99,5 +100,22 @@ int main()
         std::cout<<"Error\n";
         ara::core::ErrorCode error = _result_Finish.Error();
         std::cout << error.Message() << std::endl;
+    }
+
+    CryptoPP_HMAC_SHA256_Signature sign;
+
+    CryptoPP::SecByteBlock digest(hmac256->GetDigest().Value().data(), hmac256->GetDigest().Value().size());
+
+
+
+    sign.setValue(digest);
+
+    if(hmac256->Check(sign).Value() == true)
+    {
+        std::cout<<"Verified\n";
+    }
+    else
+    {
+        std::cout<<"Not Verifiedr\n";
     }
 }

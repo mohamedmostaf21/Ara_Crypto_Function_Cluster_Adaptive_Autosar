@@ -14,7 +14,7 @@ int main()
     
     myContext.SetKey(*myKey);
     
-    std::string str = "mr ahmed mahmoud";
+    std::string str = "HEllo";
     ara::crypto::ReadOnlyMemRegion instr(reinterpret_cast<const std::uint8_t*>(str.data()), str.size());
     
 /*
@@ -27,7 +27,7 @@ int main()
     ara::crypto::ReadOnlyMemRegion instr(reinterpret_cast<const std::uint8_t*>(paddedPlaintext.data()), paddedPlaintext.size());
 */
 
-    auto _result = myContext.ProcessBlock(instr);
+    auto _result = myContext.ProcessBlocks(instr);
     if(_result.HasValue())
     {
         std::cout << "--- sucess ---\n";
@@ -39,7 +39,7 @@ int main()
         
         myContext.SetKey(*myKey,ara::crypto::CryptoTransform::kDecrypt);
         
-        auto _result2 = myContext.ProcessBlock(encryptedDataVector);
+        auto _result2 = myContext.ProcessBlocks(encryptedDataVector);
         if(_result2.HasValue())
         {
             std::cout << "--- sucess ---\n";
