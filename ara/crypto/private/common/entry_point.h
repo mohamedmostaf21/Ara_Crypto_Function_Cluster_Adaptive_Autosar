@@ -32,7 +32,10 @@ namespace ara
            }
         }
         
-        //keys::KeyStorageProvider::Uptr LoadKeyStorageProvider () noexcept;
+        keys::KeyStorageProvider::Sptr LoadKeyStorageProvider() noexcept
+        {
+            return std::make_unique< keys::KeyStorageProvider>();
+        }
 
         //x509::X509Provider::Uptr LoadX509Provider () noexcept;
 
